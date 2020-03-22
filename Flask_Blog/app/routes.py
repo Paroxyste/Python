@@ -1,12 +1,13 @@
 import os
 import secrets
+from PIL import Image
 
 from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UpdAccountForm
 from app.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
-from PIL import Image
+
 
 posts = [
     {
@@ -116,7 +117,7 @@ def save_picture(form_picture):
 
     picture_path = os.path.join(app.root_path, 
                                 'static/profile_pics',
-                                'picture_fn')
+                                picture_fn)
 
     output_size = (125, 125)
 
