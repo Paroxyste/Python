@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm
 from app.models import User, Post
-from flask_login import login_user
+from flask_login import login_user, current_user
 
 posts = [
     {
@@ -42,6 +42,9 @@ def about():
            methods = ['GET', 'POST'])
 
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     form = RegistrationForm()
 
     if form.validate_on_submit():
@@ -69,6 +72,9 @@ def register():
            methods = ['GET', 'POST'])
 
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     form = LoginForm()
 
     if form.validate_on_submit():
