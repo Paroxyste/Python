@@ -8,28 +8,14 @@ from app.forms import RegistrationForm, LoginForm, UpdAccountForm, PostForm
 from app.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
-
-posts = [
-    {
-        'author': 'Laurent Echeverria',
-        'title': 'Hello There !',
-        'content': 'This is my first post content',
-        'date_posted': '20 Mars 2020'
-    },
-    {
-        'author': 'John Doe',
-        'title': 'Hello World',
-        'content': 'This is the second post content',
-        'date_posted': 'April 21, 2018'
-    }
-]
-
 # Root ------------------------------------------------------------------------
 
 @app.route("/")
 @app.route("/home")
 
 def home():
+    posts = Post.query.all()
+
     return render_template('home.html', 
                            posts = posts)
 
@@ -173,6 +159,13 @@ def new_post():
     form = PostForm()
 
     if form.validate_on_submit():
+        post = Post(title = form.title.data,
+                    content = form.content.data,
+                    author = current_user)
+
+        db.session.add(post)
+        db.session.commit()
+
         flash('Your post has been created !',
               'success')
         
