@@ -53,17 +53,17 @@
 
                     <div class="navbar-nav">
                         {% if current_user.is_authenticated %}
+                            <a class="nav-item nav-link" 
+                               href="{{ url_for('new_post') }}">
+                                New Post
+                            </a>
+
                             <a class="nav-item nav-link"
                                href="{{ url_for('account') }}">    
-
-                                <img class="rounded-circle mr-2"
-                                     width="35" height="35"
-                                     src="{{ image_file }}" />
-
                                {{ current_user.username }}
                             </a>
 
-                            <a class="nav-item nav-link mt-1" 
+                            <a class="nav-item nav-link" 
                                href="{{ url_for('logout') }}">
                                 Logout
                             </a>
