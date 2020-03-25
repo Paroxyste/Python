@@ -95,7 +95,7 @@ class PostForm(FlaskForm):
 
 # REQUEST RESET FORM ----------------------------------------------------------
 
-class RequestResetForm(Flask):
+class RequestResetForm(FlaskForm):
     email = StringField('Email',
                         validators = [DataRequired(), Email()])
 
