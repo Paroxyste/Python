@@ -3,10 +3,11 @@ import secrets
 from PIL import Image
 
 from flask import render_template, url_for, flash, redirect, request, abort
-from app import app, db, bcrypt
-from app.forms import RegistrationForm, LoginForm, UpdAccountForm, PostForm
+from app import app, db, bcrypt, mail
+from app.forms import RegistrationForm, LoginForm, UpdAccountForm, PostForm, RequestResetForm, ResetPasswordForm
 from app.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 
 # Root ------------------------------------------------------------------------
 
@@ -14,7 +15,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 
 def home():
-    posts = Post.query.all()
+    page = request.args.get('page', 
+                            1, 
+                            type = int)
+
+    posts = Post.query.order_by(Post.date_posted.desc())\
+                      .paginate(page = page, per_page = 5)
 
     return render_template('home.html', 
                            posts = posts)
@@ -258,3 +264,25 @@ def user_posts(username):
     return render_template('user_post.html', 
                            posts = posts,
                            user = user)
+
+# Send Reset Email ------------------------------------------------------------
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request',
+                  sender = 'noreply@website.com',
+                  recipients = [user.email])
+    
+    msg.body = f'''
+        To reset your password, visit the following link :
+        {url_for('reset_token', token = token, _external = True)}
+
+        If you did not make this request the simply ignore this email and no changes will be made.
+    '''
+
+    mail.send(msg)
+
+# Reset Password --------------------------------------------------------------
+
+
+# Reset Password Token --------------------------------------------------------
