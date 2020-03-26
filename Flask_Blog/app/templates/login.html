@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="content-section">
-        <div method="POST" action="">
+        <form method="POST" action="">
             {{ form.hidden_tag() }}
             
             <fieldset class="form-group">
@@ -54,7 +54,7 @@
                 {{ form.submit(class="btn btn-outline-info") }}
 
                 <small class="text-muted ml-2">
-                    <a href="{{ url_for('reset_pass_req') }}">
+                    <a href="{{ url_for('reset_request') }}">
                         Forgot Password ?
                     </a>
                 </small>
