@@ -1,31 +1,18 @@
+from app         import app, bcrypt, db, mail
+from app.forms   import (LoginForm, PostForm, RegistrationForm, 
+                         RequestResetForm, ResetPasswordForm, UpdAccountForm)
+from app.models  import Post, User
+from flask       import (abort, flash, redirect, render_template, request, 
+                        url_for)
+from flask_login import current_user, login_required, login_user, logout_user
+from flask_mail  import Message
+from PIL         import Image
+
 import os
 import secrets
-from PIL import Image
 
-from flask import render_template, url_for, flash, redirect, request, abort
-from app import app, db, bcrypt, mail
-from app.forms import RegistrationForm, LoginForm, UpdAccountForm, PostForm, RequestResetForm, ResetPasswordForm
-from app.models import User, Post
-from flask_login import login_user, current_user, logout_user, login_required
-from flask_mail import Message
-
-# Root ------------------------------------------------------------------------
-
-@app.route("/")
-@app.route("/home")
-
-def home():
-    page = request.args.get('page', 
-                            1, 
-                            type = int)
-
-    posts = Post.query.order_by(Post.date_posted.desc())\
-                      .paginate(page = page, per_page = 5)
-
-    return render_template('home.html', 
-                           posts = posts)
-
-# About -----------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# About
 
 @app.route("/about")
 
@@ -33,93 +20,8 @@ def about():
     return render_template('about.html', 
                            title = 'About')
 
-# Register --------------------------------------------------------------------
-
-@app.route("/register", 
-           methods = ['GET', 'POST'])
-
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    form = RegistrationForm()
-
-    if form.validate_on_submit():
-        hash_pass = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-
-        user = User(username = form.username.data, 
-                    email = form.email.data,
-                    password = hash_pass)
-
-        db.session.add(user)
-        db.session.commit()
-
-        flash(f'Your account has been created ! Your are now able to login', 
-                'success')
-
-        return redirect(url_for('login'))
-
-    return render_template('register.html', 
-                           title = 'Register', 
-                           form = form)
-
-# Login -----------------------------------------------------------------------
-
-@app.route("/login", 
-           methods = ['GET', 'POST'])
-
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        user = User.query.filter_by(email = form.email.data).first()
-
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember = form.remember.data)
-            next_page = request.args.get('next')
-
-            return redirect(next_page) if next_page else redirect(url_for('home'))
-        else:
-            flash('Login Failed ! Please check email and password.', 
-                  'danger')
-
-    return render_template('login.html', 
-                           title = 'Login',
-                           form = form)
-
-# Logout ----------------------------------------------------------------------
-
-@app.route("/logout")
-
-def logout():
-    logout_user()
-
-    return redirect(url_for('home'))
-
-# Save Picture ----------------------------------------------------------------
-
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-
-    picture_fn = random_hex + f_ext
-
-    picture_path = os.path.join(app.root_path, 
-                                'static/profile_pics',
-                                picture_fn)
-
-    output_size = (125, 125)
-
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
-
-# Account ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Account
 
 @app.route("/account",
            methods = ['GET', 'POST'])
@@ -154,45 +56,86 @@ def account():
                            image_file = image_file,
                            form = form)
 
-# Post ID ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Home / Root
 
-@app.route("/post/<int:post_id>")
+@app.route("/")
+@app.route("/home")
 
-def post(post_id):
-    post = Post.query.get_or_404(post_id)
+def home():
+    page = request.args.get('page', 
+                            1, 
+                            type = int)
 
-    return render_template('post.html',
-                           title = post.title,
-                           post = post)
+    posts = Post.query.order_by(Post.date_posted.desc())\
+                      .paginate(page = page, per_page = 5)
 
-# New Post --------------------------------------------------------------------
+    return render_template('home.html', 
+                           posts = posts)
 
-@app.route("/post/new",
+# -----------------------------------------------------------------------------
+# Login
+
+@app.route("/login", 
            methods = ['GET', 'POST'])
 
-@login_required
-
-def new_post():
-    form = PostForm()
-
-    if form.validate_on_submit():
-        post = Post(title = form.title.data,
-                    content = form.content.data,
-                    author = current_user)
-
-        db.session.add(post)
-        db.session.commit()
-
-        flash('Your post has been created !',
-              'success')
-        
+def login():
+    if current_user.is_authenticated:
         return redirect(url_for('home'))
 
-    return render_template('new_post.html', 
-                           title = 'New Post',
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email = form.email.data).first()
+
+        if user and bcrypt.check_password_hash(user.password, 
+                                               form.password.data):
+            login_user(user, remember = form.remember.data)
+
+            next_page = request.args.get('next')
+
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash('Login Failed ! Please check email and password.', 
+                  'danger')
+
+    return render_template('login.html', 
+                           title = 'Login',
                            form = form)
 
-# Edit Post -------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Logout
+
+@app.route("/logout")
+
+def logout():
+    logout_user()
+
+    return redirect(url_for('home'))
+
+# -----------------------------------------------------------------------------
+# Post : Delete
+
+@app.route("/post/<int:post_id>/delete", 
+           methods=['POST'])
+@login_required
+
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.author != current_user:
+        abort(403)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('Your post has been deleted !', 
+          'success')
+
+    return redirect(url_for('home'))
+
+# -----------------------------------------------------------------------------
+# Post : Edit
 
 @app.route("/post/<int:post_id>/update", 
            methods=['GET', 'POST'])
@@ -226,27 +169,48 @@ def update_post(post_id):
                            form = form, 
                            legend = 'Update Post')
 
-# Delete Post -----------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Post : Get ID
 
-@app.route("/post/<int:post_id>/delete", 
-           methods=['POST'])
-@login_required
+@app.route("/post/<int:post_id>")
 
-def delete_post(post_id):
+def post(post_id):
     post = Post.query.get_or_404(post_id)
 
-    if post.author != current_user:
-        abort(403)
+    return render_template('post.html',
+                           title = post.title,
+                           post = post)
 
-    db.session.delete(post)
-    db.session.commit()
+# -----------------------------------------------------------------------------
+# Post : New
 
-    flash('Your post has been deleted !', 
-          'success')
+@app.route("/post/new",
+           methods = ['GET', 'POST'])
 
-    return redirect(url_for('home'))
+@login_required
 
-# User Post -------------------------------------------------------------------
+def new_post():
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post = Post(title = form.title.data,
+                    content = form.content.data,
+                    author = current_user)
+
+        db.session.add(post)
+        db.session.commit()
+
+        flash('Your post has been created !',
+              'success')
+        
+        return redirect(url_for('home'))
+
+    return render_template('new_post.html', 
+                           title = 'New Post',
+                           form = form)
+
+# -----------------------------------------------------------------------------
+# Post : Post by Username
 
 @app.route("/user/<string:username>")
 
@@ -265,28 +229,13 @@ def user_posts(username):
                            posts = posts,
                            user = user)
 
-# Send Reset Email ------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Reset Password : Request
 
-def send_reset_email(user):
-    token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender = 'noreply@website.com',
-                  recipients = [user.email])
-    
-    msg.body = f'''
-        To reset your password, visit the following link :
-        {url_for('reset_token', token = token, _external = True)}
-
-        If you did not make this request the simply ignore this email and no changes will be made.
-    '''
-
-    mail.send(msg)
-
-# Reset Pass Request ----------------------------------------------------------
 @app.route("/reset_password",
            methods = ['GET', 'POST'])
 
-def reset_pass_req():
+def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     
@@ -295,9 +244,11 @@ def reset_pass_req():
     if form.validate_on_submit():
         user = User.query.filter_by(email = form.email.data).first()
 
-        send_reset_email()
-        flash('An email has been sent with instructions to reset your password.', 
-              'info')
+        send_reset_email(user)
+        flash('''
+            An email has been sent with instructions to reset your 
+            password.
+        ''', 'info')
         
         return redirect(url_for('login'))
     
@@ -305,7 +256,8 @@ def reset_pass_req():
                            title = 'Reset Password',
                            form = form)
 
-# Reset Password Token --------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Reset Password : Token
 
 @app.route("/reset_password/<token>",
            methods = ['GET', 'POST'])
@@ -332,11 +284,88 @@ def reset_token(token):
 
         db.session.commit()
 
-        flash('Your password has been updated ! You are now able to login',
-              'success')
+        flash('''
+            Your password has been updated ! You are now able 
+            to login
+        ''', 'success')
         
         return redirect(url_for('login'))
     
     return render_template('reset_token.html',
                            title = 'Reset Password',
+                           form = form)
+
+# -----------------------------------------------------------------------------
+# Save Picture
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+
+    picture_fn = random_hex + f_ext
+
+    picture_path = os.path.join(app.root_path, 
+                                'static/profile_pics',
+                                picture_fn)
+
+    output_size = (125, 125)
+
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+# -----------------------------------------------------------------------------
+# Send Reset Email
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+
+    msg = Message('Password Reset Request',
+                  sender = 'noreply@demo.com',
+                  recipients = [user.email])
+    
+    msg.body = f'''
+        To reset your password, visit the following link :
+        {url_for('reset_token', token = token, _external = True)}
+
+        If you did not make this request the simply ignore this email 
+        and no changes will be made.
+    '''
+
+    mail.send(msg)
+
+# -----------------------------------------------------------------------------
+# Register
+
+@app.route("/register", 
+           methods = ['GET', 'POST'])
+
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        hash_pass = bcrypt.generate_password_hash(form.password.data)\
+                          .decode('utf-8')
+
+        user = User(username = form.username.data, 
+                    email = form.email.data,
+                    password = hash_pass)
+
+        db.session.add(user)
+        db.session.commit()
+
+        flash(f'''
+            Your account has been created ! Your are now 
+            able to login
+        ''', 'success')
+
+        return redirect(url_for('login'))
+
+    return render_template('register.html', 
+                           title = 'Register', 
                            form = form)
