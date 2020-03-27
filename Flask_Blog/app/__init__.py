@@ -8,14 +8,14 @@ from flask_sqlalchemy import SQLAlchemy
 # -----------------------------------------------------------------------------
 # Init App
 
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+db = SQLAlchemy()
+bcrypt = Bcrypt()
 
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager = LoginManager()
+login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'warning'
 
-mail = Mail(app)
+mail = Mail()
 
 # -----------------------------------------------------------------------------
 # Create App
