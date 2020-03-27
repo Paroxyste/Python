@@ -1,5 +1,5 @@
-from flask      import Blueprint, render_template, request
 from app.models import Post
+from flask      import Blueprint, render_template, request
 
 # -----------------------------------------------------------------------------
 # Init main
