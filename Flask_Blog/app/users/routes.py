@@ -11,6 +11,11 @@ from flask_login import (current_user, login_user, login_required,
                          logout_user)
 
 # -----------------------------------------------------------------------------
+# Init users
+
+users = Blueprint('users', __name__)
+
+# -----------------------------------------------------------------------------
 # About
 
 @users.route("/about")
