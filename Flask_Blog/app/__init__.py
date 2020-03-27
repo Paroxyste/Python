@@ -1,53 +1,42 @@
+from app.config       import Config
 from flask            import Flask
 from flask_bcrypt     import Bcrypt
 from flask_login      import LoginManager
 from flask_mail       import Mail
 from flask_sqlalchemy import SQLAlchemy
 
-import os
-
-app = Flask(__name__)
-
 # -----------------------------------------------------------------------------
-# Database Config
-
-app.config['SECRET_KEY'] = '448cb4ea09507a2e6bab663063e5fc58'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///config.db'
+# Init App
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-
-# -----------------------------------------------------------------------------
-# Flask Mail - Default Config
-# https://pythonhosted.org/Flask-Mail/
-#
-# app.config['MAIL_SERVER']         =   'localhost'
-# app.config['MAIL_PORT']           =   25
-# app.config['MAIL_USE_SSL']        =   False
-# app.config['MAIL_USE_TLS']        =   False
-# app.config['MAIL_USERNAME']       =   None
-# app.config['MAIL_PASSWORD']       =   None
-# app.config['MAIL_DEFAULT_SENDER'] =   None
-# -----------------------------------------------------------------------------
-# Mail Server Config
-
-app.config['MAIL_SERVER']   = 'smtp.gmail.com'
-app.config['MAIL_PORT']     = 587
-app.config['MAIL_USE_SSL']  = False
-app.config['MAIL_USE_TLS']  = True
-app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
-app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
-
-mail = Mail(app)
-
-# -----------------------------------------------------------------------------
-# Login Manager
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'warning'
 
-# -----------------------------------------------------------------------------
-# Import Routes
+mail = Mail(app)
 
-from app import routes
+# -----------------------------------------------------------------------------
+# Create App
+
+def create_app(config_class  = Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    # init components
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
+
+    # import routes
+    from app.users.routes import users
+    from app.posts.routes import posts
+    from app.main.routes  import main
+
+    app.register_blueprint(users)
+    app.register_blueprint(posts)
+    app.register_blueprint(main)
+
+    return app
