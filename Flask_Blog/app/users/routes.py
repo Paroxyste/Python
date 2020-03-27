@@ -13,7 +13,7 @@ from flask_login import (current_user, login_user, login_required,
 # -----------------------------------------------------------------------------
 # About
 
-@app.route("/about")
+@users.route("/about")
 
 def about():
     return render_template('about.html', 
@@ -22,7 +22,7 @@ def about():
 # -----------------------------------------------------------------------------
 # Account
 
-@app.route("/account",
+@users.route("/account",
            methods = ['GET', 'POST'])
 
 @login_required
@@ -59,7 +59,7 @@ def account():
 # -----------------------------------------------------------------------------
 # Login
 
-@app.route("/login", 
+@users.route("/login", 
            methods = ['GET', 'POST'])
 
 def login():
@@ -89,7 +89,7 @@ def login():
 # -----------------------------------------------------------------------------
 # Logout
 
-@app.route("/logout")
+@users.route("/logout")
 
 def logout():
     logout_user()
@@ -100,7 +100,7 @@ def logout():
 # -----------------------------------------------------------------------------
 # Post : Post by Username
 
-@app.route("/user/<string:username>")
+@users.route("/user/<string:username>")
 
 def user_posts(username):
     page = request.args.get('page', 1, type = int)
