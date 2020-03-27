@@ -15,7 +15,7 @@ posts = Blueprint('posts', __name__)
 # -----------------------------------------------------------------------------
 # Post : Delete
 
-@app.route("/post/<int:post_id>/delete", 
+@posts.route("/post/<int:post_id>/delete", 
            methods = ['POST'])
 
 @login_required
@@ -37,7 +37,7 @@ def delete_post(post_id):
 # -----------------------------------------------------------------------------
 # Post : Edit
 
-@app.route("/post/<int:post_id>/update", 
+@posts.route("/post/<int:post_id>/update", 
            methods = ['GET', 'POST'])
 
 @login_required
@@ -73,7 +73,7 @@ def update_post(post_id):
 # -----------------------------------------------------------------------------
 # Post : Get ID
 
-@app.route("/post/<int:post_id>")
+@posts.route("/post/<int:post_id>")
 
 def post(post_id):
     post = Post.query.get_or_404(post_id)
@@ -85,7 +85,7 @@ def post(post_id):
 # -----------------------------------------------------------------------------
 # Post : New
 
-@app.route("/post/new",
+@posts.route("/post/new",
            methods = ['GET', 'POST'])
 
 @login_required
