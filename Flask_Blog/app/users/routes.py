@@ -47,7 +47,7 @@ def account():
         flash('Your account has been updated !',
               'success')
 
-        return redirect(url_for('account'))
+        return redirect(url_for('users.account'))
 
     elif request.method == 'GET':
         form.username.data = current_user.username
@@ -119,3 +119,27 @@ def user_posts(username):
     return render_template('user_post.html', 
                            posts = posts,
                            user  = user)
+
+# -----------------------------------------------------------------------------
+# Register
+
+@users.route("/register", 
+           methods = ['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.home'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hash_pass = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username = form.username.data, 
+                    email = form.email.data,
+                    password = hash_pass)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Your account has been created ! Your are now able to login', 
+                'success')
+        return redirect(url_for('users.login'))
+
+    return render_template('register.html', 
+                           title = 'Register', 
+                           form = form)
