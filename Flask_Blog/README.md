@@ -1,11 +1,17 @@
 # Flask Blog
 #### version : 0.0.1
 
+---
+
 ## Home Page
-![homepage](https://ibb.co/ZYBnpm9)
+<img src="https://i.ibb.co/Nm98dSR/screen1.png" alt="Home Page">
+
+---
 
 ## Update Profile
-![updprofile](https://ibb.co/p17KqK8)
+<img src="https://i.ibb.co/fXgNJN5/screen2.png" alt="Update Profile">
+
+---
 
 ## Create New Post
-![newpost](https://ibb.co/MgMLJDH)
+<img src="https://i.ibb.co/p1JpkvT/screen3.png" alt="New post">
