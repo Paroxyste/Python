@@ -1,6 +1,9 @@
 DateTime 4.3
 https://pypi.org/project/DateTime/
 
+Email-Validator 1.1.0
+https://pypi.org/project/email-validator/
+
 Flask 1.1.1
 https://pypi.org/project/Flask/
 
