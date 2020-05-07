@@ -25,6 +25,7 @@ def create_app():
     # config server
     app.config['SECRET_KEY'] = '448cb4ea09507a2e6bab663063e5fc58'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///config.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # init server
     bcrypt.init_app(app)
