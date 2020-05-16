@@ -1,4 +1,4 @@
-from flask import (current_app, redirect, render_template, request, 
+from flask import (current_app, flash, redirect, render_template, request, 
                   session, url_for)
 from shop  import app, db
 
@@ -64,7 +64,20 @@ def AddCart():
         return redirect(request.referrer)
 
 # -----------------------------------------------------------------------------
-# getCart
+# Cart : clear cart
+
+@app.route('/clearcart')
+def clearCart():
+    try:
+        session.pop('ShoppingCart', None)
+
+        return redirect(url_for('home'))
+
+    except Exception as e:
+        print(e)
+
+# -----------------------------------------------------------------------------
+# Cart : get item
 
 @app.route('/carts')
 def getCart():
@@ -88,3 +101,30 @@ def getCart():
                            categories = categories())
 
 # -----------------------------------------------------------------------------
+# Cart : update cart
+
+@app.rounte('/updatecart/<int:code>', methods = ['POST'])
+def updateCart(code):
+    if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
+        return redirect(url_for('home'))
+
+    if (request.method == 'POST'):
+        quantity = request.form.get('quantity')
+        color    = request.form.get('color')
+
+        try:
+            session.modified == True
+
+            for key, item in session['ShoppingCart'].items():
+                if (int(key) == code):
+                    item['quantity'] = quantity
+                    item['color']    = color
+
+                    flash('Item is updated !')
+
+                    return redirect(url_for('getCart'))
+        
+        except Exception as e:
+            print(e)
+
+            return redirect(url_for('getCart'))
