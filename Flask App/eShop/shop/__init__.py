@@ -44,7 +44,7 @@ search.init_app(app)
 
 migrate = Migrate(app, db)
 
-with app.app_context() :
+with app.app_context():
     if (db.engine.url.drivername == 'sqlite'):
         migrate.init_app(app, db, render_as_batch = True)
     else:
@@ -63,6 +63,6 @@ login_manager.login_message = 'Pleaser login first'
 # Routes
 
 from shop.admin     import routes
+from shop.carts     import routes
 from shop.customers import routes
 from shop.products  import routes
-from shop.carts     import carts
