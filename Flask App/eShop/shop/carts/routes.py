@@ -15,10 +15,10 @@ def MagerDicts(dict1, dict2):
         return dict(list(dict1.items()) + list(dict2.items()))
 
 # -----------------------------------------------------------------------------
-# Add carts
+# Cart : add item
 
 @app.route('/addcart', methods = ['POST'])
-def AddCart():
+def addCart():
     try:
         product_id =  request.form.get('product_id')
         quantity   = int(request.form.get('quantity'))
@@ -75,6 +75,28 @@ def clearCart():
 
     except Exception as e:
         print(e)
+
+# -----------------------------------------------------------------------------
+# Cart : delete item
+
+@app.route('/deleteitem/<int:id>')
+def deleteItem(id):
+    if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
+        return redirect(url_for('home'))
+
+    try:
+        session.modified = True
+
+        for key, item in session['ShoppingCart'].items():
+            if (int(key) == id):
+                session['ShoppingCart'].pop(key, None)
+
+                return redirect(url_for('getCart'))
+
+    except Exception as e:
+        print(e)
+
+        return redirect(url_for('getCart'))
 
 # -----------------------------------------------------------------------------
 # Cart : get item
