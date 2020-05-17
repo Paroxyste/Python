@@ -4,8 +4,8 @@ from flask import (current_app, flash, make_response, redirect,
 from flask_login import current_user, login_required, login_user, logout_user
 from shop        import app, bcrypt, db, login_manager, photos, search
 
-from .forms import CustomerLoginFrom, CustomerRegisterForm
-from .model import CustomerOrder, Register
+from .forms  import CustomerLoginForm, CustomerRegisterForm
+from .models import CustomerOrder, Register
 
 import json
 import os
@@ -14,19 +14,19 @@ import pdfkit
 # -----------------------------------------------------------------------------
 # Customer : login
 
-@app.route('/customer/login', methods = ['GET', 'POST'])
-def customerLogin():
-    form = CustomerLoginFrom()
+@app.route('/customer/login', methods=['GET', 'POST'])
+def customer_login():
+    form = CustomerLoginForm()
 
     if (form.validate_on_submit()):
-        user = Register.query.filter_by(email = form.email.data).first()
+        user = Register.query.filter_by(email=form.email.data).first()
 
         if (user and bcrypt.check_password_hash(user.password, form.password.data)):
             login_user(user)
 
             flash('You are login now !',
                   'success')
-            
+
             next = request.args.get('next')
 
             return redirect(next or url_for('home'))
@@ -37,13 +37,13 @@ def customerLogin():
         return redirect(url_for('customerLogin'))
     
     return render_template('customer/login.html',
-                           form = form)
+                           form=form)
 
 # -----------------------------------------------------------------------------
 # Customer : logout
 
 @app.route('/customer/logout')
-def customerLogout():
+def customer_logout():
     logout_user()
 
     return redirect(url_for('home'))
@@ -51,26 +51,26 @@ def customerLogout():
 # -----------------------------------------------------------------------------
 # Customer : register
 
-@app.route('/customer/register', methods = ['GET', 'POST'])
-def customerRegister():
+@app.route('/customer/register', methods=['GET', 'POST'])
+def customer_register():
     form = CustomerRegisterForm()
 
     if (form.validate_on_submit()):
         hash_password = bcrypt.generate_password_hash(form.password.data)
 
-        register = Register(name     = form.name.data,
-                            username = form.username.data,
-                            email    = form.email.data,
-                            password = hash_password,
-                            country  = form.country.data,
-                            city     = form.city.data,
-                            contact  = form.contact.data,
-                            address  = form.adress.data,
-                            zipcode  = form.zipcode.data)
+        register = Register(name=form.name.data,
+                            username=form.username.data,
+                            email=form.email.data,
+                            password=hash_password,
+                            country=form.country.data,
+                            city=form.city.data,
+                            contact=form.contact.data,
+                            address=form.adress.data,
+                            zipcode=form.zipcode.data)
         
         db.session.add(register)
 
-        flash(f'Welcome { form.name.data } ! Thank You for registering',
+        flash(f'Welcome {form.name.data} ! Thank You for registering',
               'success')
 
         db.session.commit()
@@ -78,22 +78,22 @@ def customerRegister():
         return redirect(url_for('login'))
 
     return render_template('customer/register.html',
-                           form = form)
+                           form=form)
 
 # -----------------------------------------------------------------------------
 # Order : get order
 
 @app.route('/getorder')
 @login_required
-def getOrder():
+def get_order():
     if (current_user.is_authenticated):
         customer_id = current_user.id
         invoice     = os.urandom(10).hex()
 
         try:
-            order = CustomerOrder(invoice     = invoice,
-                                  customer_id = customer_id,
-                                  orders      = session['ShoppingCart'])
+            order = CustomerOrder(invoice=invoice,
+                                  customer_id=customer_id,
+                                  orders=session['ShoppingCart'])
 
             db.session.add(order)
             db.session.commit()
@@ -104,7 +104,7 @@ def getOrder():
                   'success')
 
             return redirect(url_for('orders', 
-                                    invoice = invoice))
+                                    invoice=invoice))
 
         except Exception as e:
             print(e)
@@ -124,9 +124,9 @@ def orders(invoice):
         grandTotal  = 0
         subTotal    = 0
         customer_id = current_user.id
-        customer    = Register.query.filter_by(id = customer_id).first()
-        orders      = CustomerOrder.query.filter_by(customer_id = customer_id,
-                                                    invoice = invoice) \
+        customer    = Register.query.filter_by(id=customer_id).first()
+        orders      = CustomerOrder.query.filter_by(customer_id=customer_id,
+                                                    invoice=invoice) \
                                          .order_by(CustomerOrder.id.desc()) \
                                          .first()
 
@@ -138,31 +138,31 @@ def orders(invoice):
             grandTotal = float('%.2f' % (1.06 * subTotal))
     
     else:
-        return redirect(url_for(customerLogin))
+        return redirect(url_for(customer_login))
 
     return render_template('customer/order.html',
-                           invoice    = invoice,
-                           tax        = tax,
-                           subTotal   = subTotal,
-                           grandTotal = grandTotal,
-                           customer   = customer,
-                           orders     = orders)
+                           invoice=invoice,
+                           tax=tax,
+                           subTotal=subTotal,
+                           grandTotal=grandTotal,
+                           customer=customer,
+                           orders=orders)
 
 # -----------------------------------------------------------------------------
 # Order : make pdf order
 
-@app.route('/get_pdf/<invoice>', methods = ['POST'])
+@app.route('/get_pdf/<invoice>', methods=['POST'])
 @login_required
-def getPDF(invoice):
+def get_pdf(invoice):
     if (current_user.is_authenticated):
         grandTotal  = 0
         subTotal    = 0
         customer_id = current_user.id
 
         if (request.method == 'POST'):
-            customer = Register.quer.filter_by(id = customer_id).first()
-            orders   = CustomerOrder.query.filter_by(customer_id = customer_id,
-                                                     invoice     = invoice) \
+            customer = Register.quer.filter_by(id=customer_id).first()
+            orders   = CustomerOrder.query.filter_by(customer_id=customer_id,
+                                                     invoice=invoice) \
                                            .order_by(CustomerOrder.id.desc()) \
                                            .first()
 
@@ -174,11 +174,11 @@ def getPDF(invoice):
                 grandTotal = float('%.2f' % (1.06 * subTotal))
 
         rendered = render_template('customer/pdf.html',
-                                   invoice    = invoice,
-                                   tax        = tax,
-                                   grandTotal = grandTotal,
-                                   customer   = customer,
-                                   orders     = orders)
+                                   invoice=invoice,
+                                   tax=tax,
+                                   grandTotal=grandTotal,
+                                   customer=customer,
+                                   orders=orders)
 
         pdf = pdfkit.from_string(rendered, False)
 
