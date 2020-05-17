@@ -4,7 +4,7 @@ from flask import (current_app, flash, make_response, redirect,
 from flask_login import current_user, login_required, login_user, logout_user
 from shop        import app, bcrypt, db, login_manager, photos, search
 
-from .forms  import customer_login_form, customer_register_form
+from .forms  import CustomerLoginForm, CustomerRegisterForm
 from .models import CustomerOrder, Register
 
 import json
@@ -16,7 +16,7 @@ import pdfkit
 
 @app.route('/customer/login', methods=['GET', 'POST'])
 def customer_login():
-    form = customer_login_form()
+    form = CustomerLoginForm()
 
     if (form.validate_on_submit()):
         user = Register.query.filter_by(email=form.email.data).first()
@@ -53,7 +53,7 @@ def customer_logout():
 
 @app.route('/customer/register', methods=['GET', 'POST'])
 def customer_register():
-    form = customer_register_form()
+    form = CustomerRegisterForm()
 
     if (form.validate_on_submit()):
         hash_password = bcrypt.generate_password_hash(form.password.data)
