@@ -7,7 +7,7 @@ from shop.products.routes import brands, categories
 
 import json
 
-def MagerDicts(dict1, dict2):
+def mager_dicts(dict1, dict2):
     if (isinstance(dict1, list) and isinstance(dict2, list)):
         return dict1 + dict2
 
@@ -17,16 +17,16 @@ def MagerDicts(dict1, dict2):
 # -----------------------------------------------------------------------------
 # Cart : add item
 
-@app.route('/addcart', methods = ['POST'])
+@app.route('/addcart', methods=['POST'])
 def addCart():
     try:
-        product_id =  request.form.get('product_id')
+        product_id = request.form.get('product_id')
         quantity   = int(request.form.get('quantity'))
         color      = request.form.get('colors')
         product    = AddProduct.query.filter_by(id = product_id).first()
 
         if (request.method == 'POST'):
-            DictItems = {product_id :
+            dict_items = {product_id :
                             {'name': product.name,
                              'price': product.price,
                              'discount': product.discount,
@@ -45,15 +45,15 @@ def addCart():
                             session.modified == True
                             item['quantity'] += 1
                 else:
-                    session['ShoppingCart'] = MagerDicts(
+                    session['ShoppingCart'] = mager_dicts(
                                                 session['ShoppingCart'], 
-                                                DictItems
+                                                dict_items
                                             )
 
                     return redirect(request.referrer)
 
             else:
-                session['ShoppingCart'] = DictItems
+                session['ShoppingCart'] = dict_items
 
                 return redirect(request.referrer)
 
@@ -117,10 +117,10 @@ def getCart():
         grandtotal = float('%.2f' % (1.06 * subtotal))
 
     return render_template('products/carts.html',
-                           tax = tax,
-                           grandtotal = grandtotal,
-                           brands     = brands(),
-                           categories = categories())
+                           tax=tax,
+                           grandtotal=grandtotal,
+                           brands=brands(),
+                           categories=categories())
 
 # -----------------------------------------------------------------------------
 # Cart : update cart
