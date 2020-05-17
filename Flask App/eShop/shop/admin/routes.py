@@ -1,6 +1,6 @@
 from flask import flash, redirect, render_template, request, session, url_for
 
-from .forms  import LoginForm, RegistrationForm
+from .forms  import login_form, register_form
 from .models import User
 
 from shop  import app, bcrypt, db
@@ -15,8 +15,8 @@ def home():
     products = AddProduct.query.all()
 
     return render_template('admin/index.html',
-                           title    = 'Admin Page',
-                           products = products)
+                           title='Admin Page',
+                           products=products)
 
 # ------------------------------------------------------------------------------
 # Brands
@@ -26,8 +26,8 @@ def brands():
     brands = Brand.query.order_by(Brand.id.desc()).all()
 
     return render_template('admin/brands.html',
-                           title = 'Brands',
-                           brands = brands)
+                           title='Brands',
+                           brands=brands)
 
 # ------------------------------------------------------------------------------
 # Categories
@@ -37,23 +37,23 @@ def categories():
     categories = Category.query.order_by(Category.id.desc()).all()
 
     return render_template('admin/brands.html',
-                           title = 'Categories',
-                           categories = categories)
+                           title='Categories',
+                           categories=categories)
 
 # ------------------------------------------------------------------------------
 # Login
 
 @app.route('login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form = login_form()
 
     if (form.validate_on_submit()):
-        user = User.query.filter_by(email = form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
 
         if (user and bcrypt.check_password_hash(user.password, form.password.data)):
             session['email'] = form.email.data
 
-            flash(f'Welcome { form.email.data } you are connected now',
+            flash(f'Welcome {form.email.data} you are connected now',
                   'success')
 
             return redirect(url_for('admin'))
@@ -64,27 +64,27 @@ def login():
             return redirect(url_for('login'))
     
     return render_template('admin/login.html',
-                           title = 'Login Page',
-                           form  = form)
+                           title='Login Page',
+                           form=form)
 
 # ------------------------------------------------------------------------------
 # Register
 
 @app.route('/register')
 def register():
-    form = RegistrationForm()
+    form = register_form()
 
     if (form.validate_on_submit()):
         hash_password = bcrypt.generate_password_hash(form.password.data)
 
-        user = User(name     = form.name.data,
-                    username = form.username.data,
-                    email    = form.email.data,
-                    password = hash_password)
+        user = User(name=form.name.data,
+                    username=form.username.data,
+                    email=form.email.data,
+                    password=hash_password)
 
         db.session.add(user)
 
-        flash(f'Welcome { form.name.data } ! Thanks for registering',
+        flash(f'Welcome {form.name.data} ! Thanks for registering',
               'success')
 
         db.session.commit()
@@ -92,5 +92,5 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('admin/register.html',
-                           title = 'Registration Page',
-                           form  = form)
+                           title='Registration Page',
+                           form=form)
