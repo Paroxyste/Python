@@ -1,6 +1,6 @@
 from flask import flash, redirect, render_template, request, session, url_for
 
-from .forms  import login_form, register_form
+from .forms  import LoginForm, RegisterForm
 from .models import User
 
 from shop  import app, bcrypt, db
@@ -45,7 +45,7 @@ def categories():
 
 @app.route('login', methods=['GET', 'POST'])
 def login():
-    form = login_form()
+    form = LoginForm()
 
     if (form.validate_on_submit()):
         user = User.query.filter_by(email=form.email.data).first()
@@ -72,7 +72,7 @@ def login():
 
 @app.route('/register')
 def register():
-    form = register_form()
+    form = RegisterForm()
 
     if (form.validate_on_submit()):
         hash_password = bcrypt.generate_password_hash(form.password.data)
