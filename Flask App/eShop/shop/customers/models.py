@@ -4,9 +4,15 @@ from shop        import db, login_manager
 
 import json
 
+# -----------------------------------------------------------------------------
+# user_loader
+
 @login_manager.user_loader
 def user_loader(user_id):
     return Register.query.get(user_id)
+
+# -----------------------------------------------------------------------------
+# CustomerOrder
 
 class CustomerOrder(db.Model):
     id = db.Column(db.Integer,
@@ -33,6 +39,22 @@ class CustomerOrder(db.Model):
     def __repr__(self):
         return '<CustomerOrder %r>' % self.invoice
 
+# -----------------------------------------------------------------------------
+# JsonEncodedDict
 
+class JsonEncodedDict(db.TypeDecorator):
+    impl = db.Text
+
+    def process_bind_param(self, value, dialect):
+        if (value is None):
+            return '{}'
+        else :
+            return json.dumps(value)
+
+    def process_rsult_value(self, value, dialect):
+        if (value is None):
+            return {}
+        else:
+            return json.loads(value)
 
 db.create_all()
