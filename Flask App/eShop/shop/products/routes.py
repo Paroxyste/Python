@@ -55,3 +55,32 @@ def categories():
 
 # -----------------------------------------------------------------------------
 # Product : update product
+
+# -----------------------------------------------------------------------------
+# Search results
+
+@app.route('/result')
+def result():
+    search_word = request.args.get('q')
+    products    = AddProduct.query.msearch(search_word, 
+                                           fields=['name', 'desc'],
+                                           limit=6)
+
+    render_template('products/result.html',
+                    products=products,
+                    brands=brands(),
+                    categories=categories())
+# -----------------------------------------------------------------------------
+# Root
+
+@app.route('/')
+def home():
+    page     = request.args.get('page', 1, type=int)
+    products = AddProduct.query.filter(AddProduct.stock > 0) \
+                               .order_by(AddProduct.id.desc()) \
+                               .paginate(page=page, per_page=9)
+
+    return render_template('products/index.html', 
+                           products=products,
+                           brands=brands(),
+                           categories=categories())
