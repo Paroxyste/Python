@@ -115,17 +115,133 @@ def update_brand():
                            title='Update brand',
                            brands='brands',
                            update_brand=update_brand)
+
 # -----------------------------------------------------------------------------
 # Categories : add new category
+
+@app.route('/addcat', methods=['GET', 'POST'])
+def add_cat():
+    if (request.method == 'POST'):
+        get_cat  = request.form.get('category')
+        category = Category(name=get_cat)
+
+        db.session.add(category)
+
+        flash(f'The brand {get_cat} was added to your database',
+              'success')
+
+        db.session.commit()
+
+        return redirect(url_for('addcat'))
+
+    return render_template('products/addbrand.html',
+                           title='Add Category')
 
 # -----------------------------------------------------------------------------
 # Categories : delete category
 
+@app.route('/deletecat/<int:id>', methods=['GET', 'POST'])
+def delete_cat(id):
+    get_cat = Category.query.get_or_404(id)
+
+    if (request.method == 'POST'):
+        db.session.delete(get_cat)
+
+        flash(f'The brand {get_cat.name} was deleted from your database',
+              'danger')
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
+
+    flash(f'The brand {get_cat.name} can\'t be deleted from your database',
+          'warning')
+
+    return redirect(url_for('admin'))
+
 # -----------------------------------------------------------------------------
 # Categories : update category
 
+@app.route('/updatecat/<int:id>', methods=['GET', 'POST'])
+def update_cat(id):
+    if ('email' not in session):
+        flash('Login first please',
+              'danger')
+        
+        return redirect(url_for('login'))
+
+    update_cat   = Category.query.get_or_404(id)
+    get_category = request.form.get('category')
+
+    if (request.method == 'POST'):
+        update_cat.name = get_category
+
+        flash(f'The category {update_cat.name} was changed to {get_category}',
+              'success')
+
+        db.session.commit()
+
+        return redirect(url_for('categories'))
+
+    get_category = update_cat.name
+
+    return render_template('products/assbrand.html',
+                           title='Update Cat',
+                           update_cat=update_cat)
+
 # -----------------------------------------------------------------------------
 # Product : add new product
+
+@app.route('/addproduct', methods=['GET', 'POST'])
+def add_product():
+    form       = AddProducts(request.form)
+    brands     = Brand.query.all()
+    categories = Category.query.all()
+
+    if (request.method == 'POST' and 'image_1' in request.files):
+        name     = form.name.data
+        price    = form.price.data
+        discount = form.discount.data
+        stock    = form.stock.data
+        colors   = form.colors.data
+        desc     = form.description.data
+
+        get_brand    = request.form.get('brand')
+        get_category = request.form.get('category')
+
+        image_1 = photos.save(request.files.get('image_1'),
+                              name=os.urandom(10).hex() + '.')
+        image_2 = photos.save(request.files.get('image_2'),
+                              name=os.urandom(10).hex() + '.')
+        image_3 = photos.save(request.files.get('image_3'),
+                              name=os.urandom(10).hex() + '.')
+
+        add_product = AddProduct(name=name,
+                                 price=price,
+                                 discount=discount,
+                                 stock=stock,
+                                 colors=colors,
+                                 desc=desc,
+                                 category_id=get_category,
+                                 brand_id=get_brand,
+                                 image_1=image_1,
+                                 image_2=image_2,
+                                 image_3=image_3)
+
+        db.session.add(add_product)
+
+        flash(f'The product {name} was added in database',
+              'success')
+        
+        db.session.commit()
+
+        return redirect(url_for('admin'))
+    
+    return render_template('products/addproduct.html',
+                           form=form,
+                           title='Add Product',
+                           brands=brands,
+                           categories=categories)
 
 # -----------------------------------------------------------------------------
 # Product : delete product
@@ -135,6 +251,93 @@ def update_brand():
 
 # -----------------------------------------------------------------------------
 # Product : update product
+
+@app.route('/updateproduct/<int:id>', methods=['GET', 'POST'])
+def update_product(id):
+    form        = AddProducts(request.form)
+    get_product = AddProduct.query.get_or_404(id)
+    brands      = Brand.query.all()
+    categories  = Category.query.all()
+
+    get_brand    = request.form.get('brand')
+    get_category = request.form.get('category')
+
+    if (request.method == 'POST'):
+        get_product.name     = form.name.data
+        get_product.price    = form.price.data
+        get_product.discount = form.discount.data
+        get_product.stock    = form.stock.data
+        get_product.colors   = form.colors.data
+        get_product.dec      = form.description.data
+
+        get_product.category_id = get_category
+        get_product.brand_id    = get_brand
+
+        #  Image 1
+        if (request.files.get('image_1')):
+            try:
+                os.unlink(os.path.join(current_app.root_path,
+                                       'static/images/' 
+                                       + get_product.image_1))
+
+                get_product.image_1 = photos.save(request.files.get('image_1'),
+                                                  name=os.urandom(10).hex() + '.')
+
+            except:
+                get_product.image_1 = photos.save(request.files.get('image_1'),
+                                                  name=os.urandom(10).hex() + '.')
+
+        #  Image 2
+        if (request.files.get('image_2')):
+            try:
+                os.unlink(os.path.join(current_app.root_path,
+                                       'static/images/' 
+                                       + get_product.image_2))
+
+                get_product.image_2 = photos.save(request.files.get('image_2'),
+                                                  name=os.urandom(10).hex() + '.')
+
+            except:
+                get_product.image_2 = photos.save(request.files.get('image_2'),
+                                                  name=os.urandom(10).hex() + '.')
+
+        #  Image 3
+        if (request.files.get('image_3')):
+            try:
+                os.unlink(os.path.join(current_app.root_path,
+                                       'static/images/' 
+                                       + get_product.image_3))
+
+                get_product.image_3 = photos.save(request.files.get('image_3'),
+                                                  name=os.urandom(10).hex() + '.')
+
+            except:
+                get_product.image_3 = photos.save(request.files.get('image_3'),
+                                                  name=os.urandom(10).hex() + '.')
+
+        flash('The product was updated !',
+              'success')
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
+
+    form.name.data        = get_product.name
+    form.price.data       = get_product.price
+    form.discount.data    = get_product.discount
+    form.stock.data       = get_product.stock
+    form.colors.data      = get_product.colors
+    form.description.data = get_product.desc
+
+    get_brand    = get_product.brand.name
+    get_category = get_product.category.name
+
+    return render_template('products/addproduct.html',
+                           form=form,
+                           title='Update Product',
+                           get_product=get_product,
+                           brands=brands,
+                           categories=categories)
 
 # -----------------------------------------------------------------------------
 # Search results
@@ -150,6 +353,7 @@ def result():
                     products=products,
                     brands=brands(),
                     categories=categories())
+
 # -----------------------------------------------------------------------------
 # Root
 
