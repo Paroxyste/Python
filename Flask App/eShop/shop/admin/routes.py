@@ -1,9 +1,8 @@
-from flask import flash, redirect, render_template, request, session, url_for
-
 from .forms  import LoginForm, RegisterForm
 from .models import User
-
-from shop  import app, bcrypt, db
+from flask   import (flash, redirect, render_template, request, session, 
+                     url_for)
+from shop    import app, bcrypt, db
 
 from shop.products.models import AddProduct, Brand, Category
 
@@ -43,7 +42,7 @@ def categories():
 # ------------------------------------------------------------------------------
 # Login
 
-@app.route('login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
 
