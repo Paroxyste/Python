@@ -28,7 +28,7 @@ class AddProduct(db.Model):
     desc = db.Column(db.Text,
                      nullable=False)
 
-    pub_date = db.Column(db.Datetime,
+    pub_date = db.Column(db.DateTime,
                          nullable=False,
                          default=datetime.utcnow)
 
