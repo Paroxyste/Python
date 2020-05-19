@@ -1,6 +1,9 @@
 from datetime import datetime
 from shop     import db
 
+# -----------------------------------------------------------------------------
+# User
+
 class User(db.Model):
     id = db.Column(db.Integer, 
                    primary_key=True)
@@ -28,3 +31,7 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+# -----------------------------------------------------------------------------
+
+db.create_all()
