@@ -93,3 +93,7 @@ class Category(db.Model):
 
     def __repr__(self):
         return '<Category %r>' % self.name
+
+# -----------------------------------------------------------------------------
+
+db.create_all()
