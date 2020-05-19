@@ -12,6 +12,24 @@ def user_loader(user_id):
     return Register.query.get(user_id)
 
 # -----------------------------------------------------------------------------
+# JsonEncodedDict
+
+class JsonEncodedDict(db.TypeDecorator):
+    impl = db.Text
+
+    def process_bind_param(self, value, dialect):
+        if (value is None):
+            return '{}'
+        else :
+            return json.dumps(value)
+
+    def process_rsult_value(self, value, dialect):
+        if (value is None):
+            return {}
+        else:
+            return json.loads(value)
+
+# -----------------------------------------------------------------------------
 # CustomerOrder
 
 class CustomerOrder(db.Model):
@@ -38,24 +56,6 @@ class CustomerOrder(db.Model):
 
     def __repr__(self):
         return '<CustomerOrder %r>' % self.invoice
-
-# -----------------------------------------------------------------------------
-# JsonEncodedDict
-
-class JsonEncodedDict(db.TypeDecorator):
-    impl = db.Text
-
-    def process_bind_param(self, value, dialect):
-        if (value is None):
-            return '{}'
-        else :
-            return json.dumps(value)
-
-    def process_rsult_value(self, value, dialect):
-        if (value is None):
-            return {}
-        else:
-            return json.loads(value)
 
 # -----------------------------------------------------------------------------
 # Register
@@ -88,7 +88,7 @@ class Register(db.Model, UserMixin):
     address = db.Column(db.String(50),
                         unique=False)
 
-    zipcode = db.Column(db.String(50),
+    zipcode = db.Column(db.String(10),
                         unique=False)
 
     profile = db.Column(db.String(255),
