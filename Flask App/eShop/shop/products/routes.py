@@ -317,8 +317,7 @@ def update_product(id):
         if (request.files.get('image_1')):
             try:
                 os.unlink(os.path.join(current_app.root_path,
-                                       'static/images/' 
-                                       + get_product.image_1))
+                                       'static/images/' + get_product.image_1))
 
                 get_product.image_1 = photos.save(request.files.get('image_1'),
                                                   name=os.urandom(10).hex() + '.')
@@ -331,8 +330,7 @@ def update_product(id):
         if (request.files.get('image_2')):
             try:
                 os.unlink(os.path.join(current_app.root_path,
-                                       'static/images/' 
-                                       + get_product.image_2))
+                                       'static/images/' + get_product.image_2))
 
                 get_product.image_2 = photos.save(request.files.get('image_2'),
                                                   name=os.urandom(10).hex() + '.')
@@ -345,8 +343,7 @@ def update_product(id):
         if (request.files.get('image_3')):
             try:
                 os.unlink(os.path.join(current_app.root_path,
-                                       'static/images/' 
-                                       + get_product.image_3))
+                                       'static/images/' + get_product.image_3))
 
                 get_product.image_3 = photos.save(request.files.get('image_3'),
                                                   name=os.urandom(10).hex() + '.')
