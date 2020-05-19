@@ -54,12 +54,12 @@ class AddProduct(db.Model):
 
     # Brand relation
     brand = db.relationship('Brand',
-                            brackref=db.backref('brands', 
+                            backref=db.backref('brands', 
                                                 lazy=True))
 
     # Category relation
     category = db.relationship('Category',
-                               brackref=db.backref('categories', 
+                               backref=db.backref('categories', 
                                                    lazy=True))
 
 
