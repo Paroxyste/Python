@@ -246,8 +246,48 @@ def add_product():
 # -----------------------------------------------------------------------------
 # Product : delete product
 
+@app.route('deleteproduct/<int:id>', methods=['POST'])
+def delete_product(id):
+    get_product = AddProduct.query.get_or_404(id)
+
+    if (request.method == 'POST'):
+        try:
+            os.unlink(os.path.join(current_app.root_path,
+                                   'static/images' + get_product.image_1))
+
+            os.unlink(os.path.join(current_app.root_path,
+                                   'static/images' + get_product.image_2))
+
+            os.unlink(os.path.join(current_app.root_path,
+                                   'static/images' + get_product.image_3))
+
+        except Exception as e:
+            print(e)
+
+        db.session.delete(get_product)
+        db.session.commit()
+
+        flash(f'The product {get_product.name} was delete from your database !',
+              'success')
+
+        return redirect(url_for('admin'))
+
+    flash(f'Can\'t delete the product',
+          'danger')
+
+    return redirect(url_for('admin'))
+
 # -----------------------------------------------------------------------------
 # Product : get product id
+
+@app.route('/product/<int:id>')
+def get_product(id):
+    get_product = AddProduct.query.get_or_404(id)
+
+    return render_template('products/single_page.html',
+                           get_product=get_product,
+                           brands=brands(),
+                           categories=categories())
 
 # -----------------------------------------------------------------------------
 # Product : update product
