@@ -1,9 +1,11 @@
 from .models        import Register
 from flask_wtf      import FlaskForm
 from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms.validators import (DataRequired, Email, EqualTo, Form, Length, 
-                                PasswordField, StringField, SubmitField, 
-                                TextAreaField, ValidationError)
+from wtforms        import (Form, PasswordField, StringField, SubmitField,
+                            TextAreaField)
+
+from wtforms.validators import (DataRequired, Email, EqualTo, Length,
+                                ValidationError)
 
 # -----------------------------------------------------------------------------
 # Customer Login
