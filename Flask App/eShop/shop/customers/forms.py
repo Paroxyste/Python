@@ -28,8 +28,7 @@ class CustomerRegisterForm(FlaskForm):
                                    Length(min=3, max=50)])
 
     username = StringField('Username',
-                           validators=['Username',
-                                       DataRequired(),
+                           validators=[DataRequired(),
                                        Length(min=3, max=50)])
 
     email = StringField('Email',
