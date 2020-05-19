@@ -7,6 +7,9 @@ from shop.products.routes import brands, categories
 
 import json
 
+# -----------------------------------------------------------------------------
+# Functions
+
 def mager_dicts(dict1, dict2):
     if (isinstance(dict1, list) and isinstance(dict2, list)):
         return dict1 + dict2
@@ -125,7 +128,7 @@ def getCart():
 # -----------------------------------------------------------------------------
 # Cart : update cart
 
-@app.rounte('/updatecart/<int:code>', methods = ['POST'])
+@app.route('/updatecart/<int:code>', methods = ['POST'])
 def updateCart(code):
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
         return redirect(url_for('home'))
