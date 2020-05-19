@@ -1,41 +1,50 @@
-from flask_wtf.file     import FileAllowed, FileField, FileRequired
-from wtforms.validators import (DataRequired, FloatField, Form, IntegerField,
-                                Length, SubmitField, StringField, TextAreaField)
+from .models   import User
+from flask_wtf import FlaskForm, Form
+from wtforms   import BooleanField, PasswordField, StringField
+from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
 
-class AddProducts(Form):
+# -----------------------------------------------------------------------------
+# Admin Login
+
+class LoginForm(FlaskForm):
+    email = StringField('Email Adress', 
+                        validators=[DataRequired(),
+                                    Length(min=6, max=35)])
+
+    password = PasswordField('Password',
+                             validators=[DataRequired()])
+
+# -----------------------------------------------------------------------------
+# Admin Register
+
+class RegisterForm(FlaskForm):
     name = StringField('Name',
-                       validators=[DataRequired(), 
-                                   Length(min=3, max=80)])
+                       validators=[DataRequired(),
+                                   Length(min=4, max=25)])
 
-    price = StringField('Price',
-                        validators=[DataRequired()])
+    username = StringField('Username',
+                           validators=[DataRequired(),
+                                       Length(min=4, max=25)])
 
-    discount = IntegerField('Discount',
-                            default=0)
+    email = StringField('Email Adress',
+                        validators=[DataRequired(),
+                                    Length(min=6, max=35)])
 
-    stock = IntegerField('Stock',
-                         validators=[DataRequired(),
-                                     Length(min=1)])
+    password = PasswordField('Password',
+                             validators=[DataRequired(),
+                                         EqualTo('confirm', 
+                                                 message='Passwords must \
+                                                          match')])
 
-    colors = StringField('Colors',
-                         validators=[DataRequired(),
-                                     Length(min=3)])
+    confirm = PasswordField('Repeat Password',
+                            validators=[DataRequired()])
 
-    description = TextAreaField('Description',
-                                validators=[DataRequired(),
-                                            Length(min=3)])
+    # Check username to database
+    def validate_username(self, field):
+        if (User.query.filter_by(username=field.data).first()):
+            raise ValidationError('This username is already in use !')
 
-    image_1 = FileField('Image 1',
-                        validators=[FileRequired(),
-                                    FileAllowed(['jpg', 'png', 'gif', 'jpeg']),
-                                    'Image only please'])
-
-    image_2 = FileField('Image 2',
-                        validators=[FileRequired(),
-                                    FileAllowed(['jpg', 'png', 'gif', 'jpeg']),
-                                    'Image only please'])
-
-    image_3 = FileField('Image 3',
-                        validators=[FileRequired(),
-                                    FileAllowed(['jpg', 'png', 'gif', 'jpeg']),
-                                    'Image only please'])
+    # Check email to database
+    def validate_email(self, field):
+        if (User.query.filter_by(email=field.data).first()):
+            raise ValidationError('This email address is already in use !')
