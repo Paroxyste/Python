@@ -4,13 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" 
-          content="width = device-width, initial-scale = 1, shrink-to-fit = no" />
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <link rel="stylesheet" 
           type="text/css" 
-          href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+          href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
 
-    <title>{{ title }}</title>
+    {% if title %}
+        <title>{{title}}</title>
+    {% else %}
+        <title>eShop</title>
+    {% endif %}
 </head>
 
 <body>
@@ -18,9 +22,9 @@
 
     {% endblock content %}
 
-    <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/popper-1.16.0.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/jquery-3.5.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper-1.16.0.min.js')}}"></script>
 
 </body>
 </html>
