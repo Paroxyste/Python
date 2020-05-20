@@ -21,7 +21,7 @@ def mager_dicts(dict1, dict2):
 # Cart : add item
 
 @app.route('/addcart', methods=['POST'])
-def addCart():
+def add_cart():
     try:
         product_id = request.form.get('product_id')
         quantity   = int(request.form.get('quantity'))
@@ -70,7 +70,7 @@ def addCart():
 # Cart : clear cart
 
 @app.route('/clearcart')
-def clearCart():
+def clear_cart():
     try:
         session.pop('ShoppingCart', None)
 
@@ -83,7 +83,7 @@ def clearCart():
 # Cart : delete item
 
 @app.route('/deleteitem/<int:id>')
-def deleteItem(id):
+def delete_item(id):
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
         return redirect(url_for('home'))
 
@@ -99,13 +99,13 @@ def deleteItem(id):
     except Exception as e:
         print(e)
 
-        return redirect(url_for('getCart'))
+        return redirect(url_for('get_cart'))
 
 # -----------------------------------------------------------------------------
 # Cart : get item
 
 @app.route('/carts')
-def getCart():
+def get_cart():
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
         return redirect(url_for('home'))
 
@@ -129,7 +129,7 @@ def getCart():
 # Cart : update cart
 
 @app.route('/updatecart/<int:code>', methods = ['POST'])
-def updateCart(code):
+def update_cart(code):
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
         return redirect(url_for('home'))
 
@@ -152,4 +152,4 @@ def updateCart(code):
         except Exception as e:
             print(e)
 
-            return redirect(url_for('getCart'))
+            return redirect(url_for('get_cart'))
