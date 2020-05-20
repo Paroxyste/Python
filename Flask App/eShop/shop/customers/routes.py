@@ -1,11 +1,11 @@
-from flask import (current_app, flash, make_response, redirect, 
-                   render_template, request, session, url_for)
+from .forms  import CustomerLoginForm, CustomerRegisterForm
+from .models import CustomerOrder, Register
+from flask   import (current_app, flash, make_response, redirect, 
+                     render_template, request, session, url_for)
 
 from flask_login import current_user, login_required, login_user, logout_user
 from shop        import app, bcrypt, db, login_manager, photos, search
 
-from .forms  import CustomerLoginForm, CustomerRegisterForm
-from .models import CustomerOrder, Register
 
 import json
 import os
@@ -117,7 +117,7 @@ def get_order():
 # -----------------------------------------------------------------------------
 # Order : create order
 
-@app.route('orders/<invoice>')
+@app.route('/orders/<invoice>')
 @login_required
 def orders(invoice):
     if (current_user.is_authenticated):
