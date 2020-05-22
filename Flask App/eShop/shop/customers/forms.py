@@ -42,6 +42,12 @@ class CustomerRegisterForm(FlaskForm):
                                                  message='Both password must \
                                                           match !')])
 
+    confirm = PasswordField('Repeat Password',
+                            validators=[DataRequired(),
+                                        EqualTo('password',
+                                                message='Both password must \
+                                                         match !')])
+
     country = StringField('Country',
                           validators=[DataRequired(),
                                       Length(min=3, max=50)])
@@ -58,7 +64,7 @@ class CustomerRegisterForm(FlaskForm):
                           validators=[DataRequired(),
                                       Length(min=3, max=50)])
 
-    zipode = StringField('Zip Code',
+    zipcode = StringField('Zip Code',
                         validators=[DataRequired(),
                                     Length(min=3, max=10)])
 
