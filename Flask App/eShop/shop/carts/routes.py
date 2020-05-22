@@ -74,7 +74,7 @@ def clear_cart():
     try:
         session.pop('ShoppingCart', None)
 
-        return redirect(url_for('home'))
+        return redirect(url_for('products_page'))
 
     except Exception as e:
         print(e)
@@ -85,7 +85,7 @@ def clear_cart():
 @app.route('/deleteitem/<int:id>')
 def delete_item(id):
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
-        return redirect(url_for('home'))
+        return redirect(url_for('products_page'))
 
     try:
         session.modified = True
@@ -94,7 +94,7 @@ def delete_item(id):
             if (int(key) == id):
                 session['ShoppingCart'].pop(key, None)
 
-                return redirect(url_for('getCart'))
+                return redirect(url_for('get_cart'))
 
     except Exception as e:
         print(e)
@@ -107,7 +107,7 @@ def delete_item(id):
 @app.route('/carts')
 def get_cart():
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
-        return redirect(url_for('home'))
+        return redirect(url_for('products_page'))
 
     subtotal   = 0
     grandtotal = 0
@@ -131,7 +131,7 @@ def get_cart():
 @app.route('/updatecart/<int:code>', methods = ['POST'])
 def update_cart(code):
     if ('ShoppingCart' not in session or len(session['ShoppingCart']) <= 0):
-        return redirect(url_for('home'))
+        return redirect(url_for('products_page'))
 
     if (request.method == 'POST'):
         quantity = request.form.get('quantity')
@@ -147,7 +147,7 @@ def update_cart(code):
 
                     flash('Item is updated !')
 
-                    return redirect(url_for('getCart'))
+                    return redirect(url_for('get_cart'))
         
         except Exception as e:
             print(e)
