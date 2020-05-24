@@ -1,129 +1,170 @@
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">
-            Myshop
+<body>
+    <div class="br-logo">
+        <a href="#">
+            <span>[</span>e<i>SHOP</i><span>]</span>
         </a>
+    </div>
 
-        <button class="navbar-toggler" 
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarSupportedContent" 
-                aria-controls="navbarSupportedContent" 
-                aria-expanded="false" 
-                aria-label="Toggle navigation">
+    <div class="br-sideleft sideleft-scrollbar">
+        <ul class="br-sideleft-menu mg-t-25 mg-b-20">
+            <li class="br-menu-item">
+                <a href="index.html" class="br-menu-link active">
+                    <i class="ti-package tx-24"></i>
+                    <span class="menu-item-label">
+                        Products
+                    </span>
+                </a>
+            </li>
+        </ul>
 
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link">
+                <i class="ti-plus tx-16"></i>
+                <span class="menu-item-label">
+                    Categories
+                </span>
+            </a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">
-                        Products 
-                        <span class="sr-only">
-                            (current)
-                        </span>
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" 
-                       href="#" 
-                       id="navbarDropdown" 
-                       role="button" 
-                       data-toggle="dropdown" 
-                       aria-haspopup="true" 
-                       aria-expanded="false">
-                        Brands
-                    </a>
-
-                    <div class="dropdown-menu" 
-                         aria-labelledby="navbarDropdown">
-
-                        {% for brand in brands %}
-                            <a class="dropdown-item" 
-                               href="{{url_for('get_brand', id=brand.id)}}">
-                                {{brand.name}}
-                            </a>
-                        {% endfor %}
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" 
-                       href="#" 
-                       id="navbarDropdown" 
-                       role="button" 
-                       data-toggle="dropdown" 
-                       aria-haspopup="true" 
-                       aria-expanded="false">
-                        Categories
-                    </a>
-
-                    <div class="dropdown-menu" 
-                         aria-labelledby="navbarDropdown">
-
-                        {% for category in categories %}
-                            <a class="dropdown-item" 
-                               href="{{url_for('get_category',id=category.id)}}">
+            {% if category in categories != 0 %}
+                <ul class="br-menu-sub">
+                    {% for brand in brands %}
+                        <li class="sub-item">
+                            <a href="{{url_for('get_category',id=category.id)}}" class="sub-link">
                                 {{category.name}}
                             </a>
-                        {% endfor %}
-                    </div>
-                </li>
-            
-                {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a href="{{url_for('customer_logout')}}" 
-                           class="nav-link">
-                            {{current_user.name}}
-                        </a>
-                    </li>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
 
-                    <li class="nav-item">
-                        <a href="{{url_for('customer_logout')}}" 
-                           class="nav-link">
-                            Logout
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a href="{{url_for('customer_register')}}" 
-                           class="nav-link">
-                            Sign in
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a href="{{url_for('customer_login')}}"
-                           class="nav-link">
-                            Login
-                        </a>
-                    </li>
-                {% endif %}
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link">
+                <i class="ti-plus tx-16"></i>
+                <span class="menu-item-label">
+                    Brands
+                </span>
+            </a>
 
-                <li class="nav-item">
-                    <a href="{{url_for('get_cart')}}" 
-                       class="nav-link">
-                        Cart ({{session['Shoppingcart'] | length}})
-                    </a>
-                </li>
-            </ul>
+            {% if brand in brands != 0 %}
+                <ul class="br-menu-sub">
+                    {% for brand in brands %}
+                        <li class="sub-item">
+                            <a href="{{url_for('get_brand', id=brand.id)}}" class="sub-link">
+                                {{brand.name}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    </div>
 
-            <form class="form-inline my-2 my-lg-0" 
-                  action="{{url_for('result')}}">
-
-                <input class="form-control mr-sm-2" 
-                       type="search" 
-                       placeholder="Search" 
-                       aria-label="Search" 
-                       name="q" />
-
-                <button class="btn btn-outline-success my-2 my-sm-0" 
-                        type="submit">
-                    Search
-                </button>
+    <div class="br-header">
+        <div class="br-header-left">
+            <form action="{{url_for('result')}}">
+                <div class="input-group hidden-xs-down wd-250 transition">
+                    <input id="searchbox" type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="ti-search"></i>
+                        </button>
+                    </span>
+                </div>
             </form>
         </div>
-    </nav> 
-</div>
+
+        <div class="br-header-right">
+            <nav class="nav">
+                <div class="dropdown">
+                    {% if current_user.is_authenticated %}
+                        <a href="#" class="nav-link nav-link-profile" data-toggle="dropdown">
+                            <span class="logged-name hidden-md-down">
+                                {{current_user.name}}
+                            </span>
+                
+                            <img src="static/images/default.jpg" class="wd-32 rounded-circle" alt="">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-header wd-250">
+                            <div class="tx-center">
+                                <a href="#">
+                                    <img src="static/images/default.jpg" class="wd-80 rounded-circle" alt="">
+                                </a>
+
+                                <h6 class="logged-fullname">
+                                    {{current_user.name}}
+                                </h6>
+                    
+                                <p>{{current_user.email}}</p>
+                            </div>
+
+                            <hr>
+
+                            <ul class="list-unstyled user-profile-nav">
+                                <li>
+                                    <a href="{{url_for('customer_logout')}}">
+                                        <i class="ti-power-off"></i> 
+                                        Sign Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="#" class="nav-link nav-link-profile" data-toggle="dropdown">
+                            <span class="logged-name hidden-md-down">
+                                Sign in or Create Account
+                            </span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-header wd-150">
+                            <div class="tx-center">
+                                <a href="#">
+                                    <img src="static/images/default.jpg" class="wd-80 rounded-circle" alt="">
+                                </a>
+
+                                <h6 class="logged-fullname">
+                                    Hello World !
+                                </h6>
+                            </div>
+
+                            <hr>
+
+                            <ul class="list-unstyled user-profile-nav">
+                                <li>
+                                    <a href="{{url_for('customer_login')}}">
+                                        <i class="ti-user mr-2"></i> 
+                                        Sign in
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{url_for('customer_register')}}">
+                                        <i class="ti-save mr-2"></i> 
+                                        Sign up
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{url_for('admin')}}">
+                                        <i class="ti-crown mr-2"></i> 
+                                        Admin Pannel
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </nav>
+
+            <div class="navicon-right wd-100">
+                <a href="{{url_for('get_cart')}}" class="pos-relative">
+                    <i class="ti-shopping-cart ml-1"></i>
+                    <span>
+                        <small>
+                            {{ session['Shoppingcart']|length }}
+                        </small>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
