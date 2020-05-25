@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
+{% from "_formhelpers.html" import render_field %}
+
 <div class="d-flex align-items-center justify-content-center bg-br-primary ht-100v">
 
     <div class="login-wrapper wd-300 wd-xs-350 pd-25 pd-xs-40 bg-white rounded shadow-base">
@@ -10,10 +12,8 @@
         </div>
 
         <div class="tx-center mg-t-20 mg-b-20">
-            En continuant, vous acceptez les conditions d'utilisation d'eSHOP. 
+            Welcome back my friend ! Please sign in.
         </div>
-
-        {% from "_formhelpers.html" import render_field %}
 
         <form method="POST">
             {{form.csrf_token}}
@@ -24,6 +24,10 @@
 
             <div class="form-group">
                 {{render_field(form.password, class="form-control", placeholder="Enter your password")}}
+            </div>
+
+            <div class="form-group tx-12">
+                By clicking the Sign In button below, you agreed to our privacy policy and terms of use of our website.
             </div>
 
             <button type="submit" class="btn btn-info btn-block">
