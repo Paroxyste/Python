@@ -81,20 +81,20 @@
                     {% if current_user.is_authenticated %}
                         <a href="#" class="nav-link nav-link-profile" data-toggle="dropdown">
                             <span class="logged-name hidden-md-down">
-                                {{current_user.name}}
+                                {{current_user.firstname}} {{current_user.lastname}}
                             </span>
-                
-                            <img src="static/images/default.jpg" class="wd-32 rounded-circle" alt="">
+
+                            <img src="static/images/{{current_user.profile}}" class="wd-32 rounded-circle" alt="">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-header wd-250">
                             <div class="tx-center">
                                 <a href="#">
-                                    <img src="static/images/default.jpg" class="wd-80 rounded-circle" alt="">
+                                    <img src="static/images/{{current_user.profile}}" class="wd-80 rounded-circle" alt="">
                                 </a>
 
                                 <h6 class="logged-fullname">
-                                    {{current_user.name}}
+                                    {{current_user.firstname}} {{current_user.lastname}}
                                 </h6>
                     
                                 <p>{{current_user.email}}</p>
@@ -105,7 +105,7 @@
                             <ul class="list-unstyled user-profile-nav">
                                 <li>
                                     <a href="{{url_for('customer_logout')}}">
-                                        <i class="ti-power-off"></i> 
+                                        <i class="ti-power-off mr-2"></i> 
                                         Sign Out
                                     </a>
                                 </li>
@@ -145,7 +145,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{url_for('admin')}}">
+                                    <a href="{{url_for('login')}}">
                                         <i class="ti-crown mr-2"></i> 
                                         Admin Pannel
                                     </a>
