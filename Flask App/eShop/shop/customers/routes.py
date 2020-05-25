@@ -1,5 +1,5 @@
 from .forms  import CustomerLoginForm, CustomerRegisterForm
-from .models import CustomerOrder, Register
+from .models import Customer, CustomerOrder
 from flask   import (current_app, flash, make_response, redirect, 
                      render_template, request, session, url_for)
 
@@ -19,22 +19,22 @@ def customer_login():
     form = CustomerLoginForm()
 
     if (form.validate_on_submit()):
-        user = Register.query.filter_by(email=form.email.data).first()
+        customer = Customer.query.filter_by(email=form.email.data).first()
 
-        if (user and bcrypt.check_password_hash(user.password, form.password.data)):
-            login_user(user)
+        if (customer and bcrypt.check_password_hash(customer.password, form.password.data)):
+            login_user(customer)
 
             flash('You are login now !',
                   'success')
 
             next = request.args.get('next')
 
-            return redirect(next or url_for('home'))
-        
+            return redirect(next or url_for('products_page'))
+
         flash('Incorrect email and password',
               'danger')
 
-        return redirect(url_for('customerLogin'))
+        return redirect(url_for('customer_login'))
     
     return render_template('customer/login.html',
                            form=form)
@@ -46,7 +46,7 @@ def customer_login():
 def customer_logout():
     logout_user()
 
-    return redirect(url_for('home'))
+    return redirect(url_for('products_page'))
 
 # -----------------------------------------------------------------------------
 # Customer : register
@@ -58,24 +58,24 @@ def customer_register():
     if (form.validate_on_submit()):
         hash_password = bcrypt.generate_password_hash(form.password.data)
 
-        register = Register(name=form.name.data,
+        customer = Customer(firstname=form.firstname.data,
+                            lastname=form.lastname.data,
                             username=form.username.data,
                             email=form.email.data,
                             password=hash_password,
                             country=form.country.data,
                             city=form.city.data,
-                            contact=form.contact.data,
-                            address=form.adress.data,
+                            address=form.address.data,
                             zipcode=form.zipcode.data)
         
-        db.session.add(register)
+        db.session.add(customer)
 
-        flash(f'Welcome {form.name.data} ! Thank You for registering',
+        flash(f'Welcome {form.firstname.data} {form.lastname.data}! Thank You for registering',
               'success')
 
         db.session.commit()
 
-        return redirect(url_for('login'))
+        return redirect(url_for('customer_login'))
 
     return render_template('customer/register.html',
                            form=form)
@@ -112,7 +112,7 @@ def get_order():
             flash('Something went wrong while get order',
                   'danger')
 
-            return redirect(url_for('getCart'))
+            return redirect(url_for('get_cart'))
 
 # -----------------------------------------------------------------------------
 # Order : create order
@@ -124,7 +124,7 @@ def orders(invoice):
         grandTotal  = 0
         subTotal    = 0
         customer_id = current_user.id
-        customer    = Register.query.filter_by(id=customer_id).first()
+        customer    = Customer.query.filter_by(id=customer_id).first()
         orders      = CustomerOrder.query.filter_by(customer_id=customer_id,
                                                     invoice=invoice) \
                                          .order_by(CustomerOrder.id.desc()) \
@@ -160,7 +160,7 @@ def get_pdf(invoice):
         customer_id = current_user.id
 
         if (request.method == 'POST'):
-            customer = Register.quer.filter_by(id=customer_id).first()
+            customer = Customer.quer.filter_by(id=customer_id).first()
             orders   = CustomerOrder.query.filter_by(customer_id=customer_id,
                                                      invoice=invoice) \
                                            .order_by(CustomerOrder.id.desc()) \

@@ -1,4 +1,4 @@
-from .models        import Register
+from .models        import Customer
 from flask_wtf      import FlaskForm
 from flask_wtf.file import FileAllowed, FileField, FileRequired
 from wtforms        import (Form, PasswordField, StringField, SubmitField,
@@ -23,7 +23,11 @@ class CustomerLoginForm(FlaskForm):
 # Customer Register
 
 class CustomerRegisterForm(FlaskForm):
-    name = StringField('Name',
+    firstname = StringField('First Name',
+                       validators=[DataRequired(),
+                                   Length(min=3, max=50)])
+
+    lastname = StringField('Last Name',
                        validators=[DataRequired(),
                                    Length(min=3, max=50)])
 
@@ -56,10 +60,6 @@ class CustomerRegisterForm(FlaskForm):
                        validators=[DataRequired(),
                                    Length(min=3, max=50)])
 
-    contact = StringField('Contact',
-                          validators=[DataRequired(),
-                                      Length(min=3, max=50)])
-
     address = StringField('Address',
                           validators=[DataRequired(),
                                       Length(min=3, max=50)])
@@ -68,7 +68,7 @@ class CustomerRegisterForm(FlaskForm):
                         validators=[DataRequired(),
                                     Length(min=3, max=10)])
 
-    profile = FileField('Profile',
+    profile = FileField('Profile Picture',
                         validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'],
                                                 'Image only please !')])
 
@@ -76,10 +76,10 @@ class CustomerRegisterForm(FlaskForm):
 
     # Check username to database
     def validate_username(self, username):
-        if (Register.query.filter_by(username=username.data).first()):
+        if (Customer.query.filter_by(username=username.data).first()):
             raise ValidationError('This username is already in use !')
 
     # Check email to database
     def validate_email(self, email):
-        if (Register.query.filter_by(email=email.data).first()):
+        if (Customer.query.filter_by(email=email.data).first()):
             raise ValidationError('This email address is already in use !')

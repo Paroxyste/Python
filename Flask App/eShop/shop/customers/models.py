@@ -9,7 +9,7 @@ import json
 
 @login_manager.user_loader
 def user_loader(user_id):
-    return Register.query.get(user_id)
+    return Customer.query.get(user_id)
 
 # -----------------------------------------------------------------------------
 # JsonEncodedDict
@@ -60,12 +60,15 @@ class CustomerOrder(db.Model):
 # -----------------------------------------------------------------------------
 # Register
 
-class Register(db.Model, UserMixin):
+class Customer(db.Model, UserMixin):
     id = db.Column(db.Integer,
                    primary_key=True)
 
-    name = db.Column(db.String(50),
-                     unique=False)
+    firstname = db.Column(db.String(50),
+                          unique=False)
+
+    lastname = db.Column(db.String(50),
+                         unique=False)
 
     username = db.Column(db.String(50),
                          unique=True)
@@ -82,9 +85,6 @@ class Register(db.Model, UserMixin):
     city = db.Column(db.String(50),
                      unique=False)
 
-    contact = db.Column(db.String(50),
-                        unique=False)
-
     address = db.Column(db.String(50),
                         unique=False)
 
@@ -100,7 +100,7 @@ class Register(db.Model, UserMixin):
                              default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Register %r>' % self.name
+        return '<Customer %r>' % self.name
 
 # -----------------------------------------------------------------------------
 
