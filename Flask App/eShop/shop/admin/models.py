@@ -4,13 +4,17 @@ from shop     import db
 # -----------------------------------------------------------------------------
 # User
 
-class User(db.Model):
+class Admin(db.Model):
     id = db.Column(db.Integer, 
                    primary_key=True)
 
-    name = db.Column(db.String(50), 
-                     unique=False, 
-                     nullable=False)
+    firstname = db.Column(db.String(50), 
+                          unique=False, 
+                          nullable=False)
+
+    lastname = db.Column(db.String(50), 
+                         unique=False, 
+                         nullable=False)
 
     username = db.Column(db.String(50), 
                          unique=True, 
@@ -30,7 +34,7 @@ class User(db.Model):
                          default='default.jpg')
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Admin %r>' % self.username
 
 # -----------------------------------------------------------------------------
 
