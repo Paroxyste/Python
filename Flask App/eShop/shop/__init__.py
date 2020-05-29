@@ -18,7 +18,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 # Generate with os.urandom(24).hex()
-app.config['SECRET_KEY'] = ''
+app.config['SECRET_KEY'] = 'd71ac075f92ea98c63f58dbd108f046bdbdead054850c132'
 
 app.config['SQLALCHEMY_DATABASE_URI']        = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

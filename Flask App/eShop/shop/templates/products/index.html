@@ -36,7 +36,7 @@
                                     Details
                                 </a>
 
-                                <form action="{{url_for('AddCart')}}"
+                                <form action="{{url_for('add_cart')}}"
                                       method="post">
 
                                     <input type="hidden" 
@@ -143,7 +143,7 @@
                                         Details
                                     </a>
 
-                                    <form action="{{url_for('AddCart')}}" 
+                                    <form action="{{url_for('add_art')}}" 
                                           method="post">
 
                                         <input type="hidden" 
@@ -210,7 +210,7 @@
                         {% endif %}
 
                         {% if get_cat_prod.has_next %}
-                            <a href="{{url_for('home', page=get_cat_prod.next_num)}}"
+                            <a href="{{url_for('admin', page=get_cat_prod.next_num)}}"
                                class="btn btn-sm btn-outline-info">
                                 Next
                             </a>
@@ -251,7 +251,7 @@
                                             Details
                                         </a>
 
-                                        <form action="{{url_for('AddCart')}}" 
+                                        <form action="{{url_for('addcart')}}" 
                                               method="post">
 
                                             <input type="hidden" 
@@ -291,7 +291,7 @@
                     <div class="row mt-4">
                         <div class="col text-center">
                             {% if products.has_prev %}
-                                <a href="{{url_for('home', page=products.prev_num)}}"
+                                <a href="{{url_for('admin', page=products.prev_num)}}"
                                    class="btn btn-sm btn-outline-info">
                                     Previous
                                 </a>
@@ -301,12 +301,12 @@
                                 {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
                                     {% if page_num %}
                                         {% if products.page == page_num %}
-                                            <a href="{{url_for('home', page=page_num)}}" 
+                                            <a href="{{url_for('admin', page=page_num)}}" 
                                                class="btn btn-sm btn-info">
                                                 {{page_num}}
                                             </a>
                                         {% else %}
-                                            <a href="{{url_for('home', page=page_num)}}" 
+                                            <a href="{{url_for('admin', page=page_num)}}" 
                                                class="btn btn-sm btn-outline-info">
                                                 {{page_num}}
                                             </a>
@@ -317,7 +317,7 @@
                                 {% endfor %}
                             {% endif %}
                         {% if products.has_next %}
-                            <a href="{{url_for('home', page=products.next_num)}}"
+                            <a href="{{url_for('admin', page=products.next_num)}}"
                                class="btn btn-sm btn-outline-info">
                                 Next
                             </a>

@@ -79,7 +79,7 @@ def get_brand(id):
                                 .paginate(page=page,
                                           per_page=9)
 
-    return render_template('product/index.html',
+    return render_template('products/index.html',
                            brand=brand,
                            brands=brands(),
                            categories=categories(),
@@ -185,7 +185,7 @@ def update_cat(id):
 
     get_category = update_cat.name
 
-    return render_template('products/assbrand.html',
+    return render_template('products/addbrand.html',
                            title='Update Cat',
                            update_cat=update_cat)
 
@@ -397,9 +397,16 @@ def products_page():
 @app.route('/result')
 def result():
     search_word = request.args.get('q')
-    products    = AddProduct.query.msearch(search_word, 
-                                           fields=['name', 'desc'],
-                                           limit=6)
+
+    
+    if search_word == None:
+        return redirect(url_for('products_page'))
+    else:
+        products    = AddProduct.query.msearch(search_word, 
+                                            fields=['name', 'desc'],
+                                            limit=6)
+
+
 
     render_template('products/result.html',
                     products=products,
