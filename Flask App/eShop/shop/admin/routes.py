@@ -43,7 +43,7 @@ def categories():
 # Login
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def admin_login():
     form = LoginForm()
 
     if (form.validate_on_submit()):
@@ -60,7 +60,7 @@ def login():
             flash('Wrong email and password',
                   'danger')
 
-            return redirect(url_for('login'))
+            return redirect(url_for('admin_login'))
     
     return render_template('admin/login.html',
                            title='Login Page',
@@ -70,7 +70,7 @@ def login():
 # Register
 
 @app.route('/register')
-def register():
+def admin_register():
     form = RegisterForm()
 
     if (form.validate_on_submit()):
@@ -89,7 +89,7 @@ def register():
 
         db.session.commit()
 
-        return redirect(url_for('login'))
+        return redirect(url_for('admin_login'))
 
     return render_template('admin/register.html',
                            title='Registration Page',
