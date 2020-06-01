@@ -93,6 +93,7 @@ class Customer(db.Model, UserMixin):
 
     profile = db.Column(db.String(255),
                         unique=False,
+                        nullable=False,
                         default='default.jpg')
 
     date_created = db.Column(db.DateTime,
