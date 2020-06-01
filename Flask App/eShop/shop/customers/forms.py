@@ -1,7 +1,6 @@
-from .models        import Customer
-from flask_wtf      import FlaskForm
-from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms        import (Form, PasswordField, StringField, SubmitField,
+from .models   import Customer
+from flask_wtf import FlaskForm
+from wtforms   import (Form, PasswordField, StringField, SubmitField,
                             TextAreaField)
 
 from wtforms.validators import (DataRequired, Email, EqualTo, Length,
@@ -67,10 +66,6 @@ class CustomerRegisterForm(FlaskForm):
     zipcode = StringField('Zip Code',
                         validators=[DataRequired(),
                                     Length(min=3, max=10)])
-
-    profile = FileField('Profile Picture',
-                        validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'],
-                                                'Image only please !')])
 
     submit = SubmitField('Register')
 
