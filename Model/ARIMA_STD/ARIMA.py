@@ -1,3 +1,6 @@
+# -----------------------------------------------------------------------------
+# Import modules
+
 import numpy  as np
 import os
 import pandas as pd
@@ -9,111 +12,120 @@ from datetime import datetime, timedelta
 from statsmodels.tsa.arima_model import ARIMA
 
 # -----------------------------------------------------------------------------
-# Script Parameters
+# CHECK PARAMETERS
 
-if (len(sys.argv) != 11):
+if (len(sys.argv) != 9):
     print('LIST OF PARAMETERS :\n')
-    print('\nCSV_PATH = C:\\Users\\Folder\\FolderContainCSV\\')
-    print('CSV_NAME = CSVFileName (without .csv)')
+    print('\nCSV_DATA = C:\\Users\\Folder\\FolderContainCSV\\csv_file_name.csv')
     print('\nSEP = \\t or \s or ; or ,')
     print('\nTIME_RES = XXT (XX is an integer || T = minutes)')
     print('\nDATE_START = Start Date (YYYY-mm-dd)')
     print('TIME_START = Start Time (HH:MM:SS)')
     print('\nDATE_STOP = Stop Date  (YYYY-mm-dd)')
     print('TIME_STOP = Start Time (HH:MM:SS)')
-    print('\nMATRIX_DIR = C:\\Users\\Folder\\FolderForMatrixOutput\\')
-    print('MATRIX_NAME = nameofmymatrix (without .txt)')
+    print('\nMATRIX_OUTPUT = C:\\Users\\Folder\\FolderForMatrixOutput\\my_matrix.txt')
 
 else :
     # CSV path <str>
-    CSV_PATH = sys.argv[1]
-
-    # CSV Name <str>
-    CSV_NAME = sys.argv[2]
+    CSV_DATA = sys.argv[1]
 
     # Separator <str>
-    SEP = sys.argv[3]
+    SEP = sys.argv[2]
 
     # Resample <str>
-    TIME_RES = sys.argv[4]
+    TIME_RES = sys.argv[3]
 
     # Start Date : YYYY-MM-DD <str>
-    DATE_START = sys.argv[5]
+    DATE_START = sys.argv[4]
 
     # Start Time : HH:MM:SS <str>
-    TIME_START = sys.argv[6]
+    TIME_START = sys.argv[5]
     
     # Stop Date : YYYY-MM-DD <str>
-    DATE_STOP = sys.argv[7]
+    DATE_STOP = sys.argv[6]
 
     # Stop Time : HH:MM:SS <str>
-    TIME_STOP = sys.argv[8]
+    TIME_STOP = sys.argv[7]
 
-    # Matrix output directory <str>
-    MATRIX_DIR = sys.argv[9]
+    # Matrix path <str>
+    MATRIX_OUTPUT = sys.argv[8]
 
-    # Matrix output name <str>
-    MATRIX_NAME = sys.argv[10]
+# -----------------------------------------------------------------------------
+# LOADING_DATA
 
-    # -------------------------------------------------------------------------
-    # Loading & Resampling Data
-
-    print('\n----------------------- SCRIPT RUNNING -----------------------\n')
-
-    csv = CSV_PATH + CSV_NAME + '.csv'
-
-    df = pd.read_csv(csv, 
-                    sep=';', 
-                    parse_dates=[0], 
-                    index_col=0)
+def loading_data(CSV_DATA, SEP, TIME_RES):
+    df = pd.read_csv(CSV_DATA, 
+                     sep=';', 
+                     parse_dates=[0], 
+                     index_col=0)
 
     df = df.resample(TIME_RES).first().reindex(columns=df.columns)
 
-    print('\n- DATA LOADED : [OK]\n')
+    print('- DATA LOADED : [OK]\n')
 
-    # -------------------------------------------------------------------------
-    # Clean Data
+    return df
 
+# -----------------------------------------------------------------------------
+# CLEAN_DATA
+
+def clean_data(df):
     df = df.fillna(0)
     df.dropna()
-
+    
     print('- DATA CLEANED : [OK]\n')
 
-    # -------------------------------------------------------------------------
-    # Model with default parameters
+    return df
 
-    print('- START MODEL : [OK]\n')
+# -----------------------------------------------------------------------------
+# ARIMA_MODEL
 
+def arima_model(df):
     model = ARIMA(df, 
-                order=(2, 0, 2))
+                  order=(2,0,2))
 
-    results = model.fit(disp=-1)
+    model_fit = model.fit(disp=-1)
 
-    print('\n------------------------ MODEL READY ------------------------\n')
+    print('- MODEL READY : [OK]\n')
 
-    # -------------------------------------------------------------------------
-    # Extract matrix data
+    return model_fit
 
+# -----------------------------------------------------------------------------
+# START_DATE
+
+def start_date(DATE_START, TIME_START):
     start = DATE_START + ' ' + TIME_START
-    end   = DATE_STOP  + ' ' + TIME_STOP
 
-    ex_results = results.predict(start=start, 
-                                 end=end, 
-                                 typ='levels')
+    return start
 
-    print('\n- GET PREDICT VALUES : [OK]\n')
+# -----------------------------------------------------------------------------
+# STOP_DATE
 
-    # -------------------------------------------------------------------------
-    # Clear interval
+def stop_date(DATE_STOP, TIME_STOP):
+    stop = DATE_STOP + ' ' + TIME_STOP
 
+    return stop
+
+# -----------------------------------------------------------------------------
+# EXTRACT_DATA
+
+def extract_data(model_fit, start, stop):
+    results = model_fit.predict(start=start, 
+                                end=stop, 
+                                typ='levels')
+
+    print('- GET PREDICT VALUES : [OK]\n')
+
+    return results
+
+# -----------------------------------------------------------------------------
+# DATETIME_INDEX
+
+def datetime_index(TIME_RES, start, stop):
     interval = re.sub('[^0-9]', '', TIME_RES)
     interval = int(interval)
 
-    # -------------------------------------------------------------------------
-    # Create new index
-
     ind_start = datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
-    ind_end   = datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
+    ind_end   = datetime.strptime(stop, '%Y-%m-%d %H:%M:%S')
 
     seconds = (ind_end - ind_start).total_seconds()
 
@@ -125,48 +137,69 @@ else :
         date_value = ind_start + timedelta(seconds=i)
         date.append(date_value.strftime('%Y-%m-%dT%H:%M:%S'))
 
-    end = end.replace(' ' , 'T') 
-    date.append(end)
+    stop = stop.replace(' ' , 'T') 
+    date.append(stop)
 
     print('- GET DATETIME INDEX : [OK]\n')
+    
+    return date
 
-    # -------------------------------------------------------------------------
-    # Create 2D matrix
+# -----------------------------------------------------------------------------
+# MATRIX_2D
 
+def matrix_2d(date, results):
     date = np.asarray(date)
-    ex_results = np.asarray(ex_results)
+    results = np.asarray(results)
 
     arr_len = len(date)
 
     date = date.reshape(arr_len, 1)
-    ex_results = ex_results.reshape(arr_len, 1)
+    results = results.reshape(arr_len, 1)
 
-    new_matrix = np.concatenate((date, ex_results), axis=1)
+    new_matrix = np.concatenate((date, results), axis=1)
 
     print('- 2D MATRIX : [OK]\n')
+    
+    return new_matrix
 
-    # -------------------------------------------------------------------------
-    # Matrix datas directory
+# -----------------------------------------------------------------------------
+# SAVE_DATA
 
-    output_dir = MATRIX_DIR
+def save_data(MATRIX_OUTPUT, new_matrix):
+    output_matrix = MATRIX_OUTPUT.rsplit('\\', 1)
+    output_matrix_dir = output_matrix[0]
 
     try :
-        os.mkdir(MATRIX_DIR)
+        os.mkdir(output_matrix_dir)
 
     except OSError:
-        print('Failure to create the folder => Already Existing\n')
+        print('- Folder already existing\n')
 
     else :
-        print('Successfully created the directory !\n')
+        print('- Folder successfully created !\n')
 
-    # -------------------------------------------------------------------------
-    # Matrix name output
-
-    out_file_name = MATRIX_DIR + MATRIX_NAME + '.txt'
-
-    np.savetxt(out_file_name, new_matrix, fmt='%s')
+    np.savetxt(MATRIX_OUTPUT, new_matrix, fmt='%s')
 
     print('\nThe file has been saved ! \n +\
-        Your file is in %s \n' % out_file_name)
+        Your file is in %s \n' % MATRIX_OUTPUT)
 
-    print('\n------------------- PREDICTION SUCCESSFULLY -------------------')
+# -----------------------------------------------------------------------------
+# MAIN
+
+def main():
+    df = clean_data(loading_data(CSV_DATA, SEP, TIME_RES))
+
+    model_fit = arima_model(df)
+
+    start = start_date(DATE_START, TIME_START)
+    stop = stop_date(DATE_STOP, TIME_STOP)
+
+    results = extract_data(model_fit, start, stop)
+
+    date = datetime_index(TIME_RES, start, stop)
+
+    new_matrix = matrix_2d(date, results)
+
+    save_data(MATRIX_OUTPUT, new_matrix)
+
+main()
