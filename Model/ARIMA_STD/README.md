@@ -36,36 +36,33 @@ pip3 install -U statsmodels
 
 ## Usage
 
-ARIMA STD requires 10 parameters at launch :
+ARIMA STD requires 8 parameters at launch :
 
--  CSV_PATH <string>
--  CSV_NAME <string>
+-  CSV_DATA <string>
 -  SEP <string>
 -  TIME_RES <string>
 -  DATE_START _(YYYY-MM-DD)_ <string>
 -  TIME_START _(HH:MM:SS)_ <string>
 -  DATE_STOP _(YYYY-MM-DD)_ <string>
 -  TIME_STOP _(HH:MM:SS)_ <string>
--  MATRIX_DIR <string>
--  MATRIX_NAME <string>
+-  MATRIX_OUTPUT <string>
 
 #### Launch Script
 
 **If python3 OR python2 is the only environment installed :**
 ```python
-python ARIMA.py C:\Users\Administrateur\Documents\CSV_Folder\ mycsvname ; 15T 2020-06-18 12:30:00 2020-12-24 23:45:00 C:\Users\Administrateur\Documents\Output_Folder\ my_matrix
+python ARIMA.py C:\Users\Administrateur\Documents\CSV_Folder\mycsvname.csv ; 15T 2020-06-18 12:30:00 2020-12-24 23:45:00 C:\Users\Administrateur\Documents\Output_Folder\my_matrix.txt
 ```
 
 **If python2 AND python3 are installed :**
 ```python
-python3 ARIMA.py C:\Users\Administrateur\Documents\CSV_Folder\ mycsvname ; 15T 2020-06-18 12:30:00 2020-12-24 23:45:00 C:\Users\Administrateur\Documents\Output_Folder\ my_matrix
+python3 ARIMA.py C:\Users\Administrateur\Documents\CSV_Folder\mycsvname.csv ; 15T 2020-06-18 12:30:00 2020-12-24 23:45:00 C:\Users\Administrateur\Documents\Output_Folder\my_matrix.txt
 ```
 
 #### Details :
 ```python
 # CSV file
-CSV_PATH = C:\Users\Administrateur\Documents\CSV_Folder\
-CSV_NAME = mycsvname # Do not add the .csv extension
+CSV_DATA = C:\Users\Administrateur\Documents\CSV_Folder\mycsvname.csv
 
 # Dataframe
 SEP = ;
@@ -78,8 +75,7 @@ DATE_STOP = 2020-12-24
 TIME_STOP = 23:45:00
 
 # Output file
-MATRIX_DIR = C:\Users\Administrateur\Documents\Output_Folder\
-MATRIX_NAME = my_matrix # Do not add the .txt extension.
+MATRIX_OUTPUT = C:\Users\Administrateur\Documents\Output_Folder\my_matrix.txt
 ```
 
 #### Resample
