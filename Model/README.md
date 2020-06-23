@@ -1,6 +1,6 @@
-# Analyse Supervision
+# Automated Models
 
-## Modèle disponible
+## Available Models
 **ARIMA**
 >
 > The model attempts to determine each value in the series based on the values that precede it. ARIMA model estimation assumes a stationary series. This means that the mean of the series 
@@ -8,7 +8,7 @@
 > 
 > - _This function requires the installation of StatsModels._
 
-## Fonctions disponible
+## Available Functions
 **datetime_index**
 > 
 > Generates an index by taking a start date and time ```DATE_START``` ```TIME_START```, an end date and time ```DATE_STOP``` ```TIME_STOP```, and a time interval ```resampler```.
