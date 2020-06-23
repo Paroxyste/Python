@@ -6,7 +6,7 @@
 > The model attempts to determine each value in the series based on the values that precede it. ARIMA model estimation assumes a stationary series. This means that the mean of the series 
 > is constant over time, as is the variance.
 > 
-> - _Ce modèle nécéssite l'installation de StatsModels._
+> - _This function requires the installation of StatsModels._
 
 ## Fonctions disponible
 **datetime_index**
