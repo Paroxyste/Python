@@ -16,7 +16,7 @@ import sys
 # -----------------------------------------------------------------------------
 # Build run function
 
-def run(config):
+def run_prophet(config):
     df = load_data_influx(server_name,
                           server_port,
                           user_name,
@@ -74,4 +74,4 @@ else :
 
     path = str(read_params(config , 'OUTPUT' , 'path' , '.'))
 
-    run(config)
+    run_prophet(config)
