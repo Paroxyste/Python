@@ -1,46 +1,34 @@
-# Automated Models
+# Analyse Supervision
 
-## Available Models
+## Modèles
+
 **ARIMA**
 >
-> The model attempts to determine each value in the series based on the values that precede it. ARIMA model estimation assumes a stationary series. This means that the mean of the series 
-> is constant over time, as is the variance.
+> The model attempts to determine each value in the series based on the values that precede it.  
+> ARIMA model estimation assumes a stationary series. 
+> This means that the mean of the series is constant over time, as is the variance.
 > 
-> - _This function requires the installation of StatsModels._
+> - _This model requires the installation of [statsmodels](https://www.statsmodels.org/stable/index.html)._
 
-## Available Functions
-**datetime_index**
-> 
-> Generates an index by taking a start date and time ```DATE_START``` ```TIME_START```, an end date and time ```DATE_STOP``` ```TIME_STOP```, and a time interval ```resampler```.
+---
 
-
-**extract_data**
+**PROPHET**
 >
-> Retrieves the prediction matrix of the model to train ```model_fit``` from a start date and time ```DATE_START``` ```TIME_START```, and a date and time of end ```DATE_STOP``` 
-> ```TIME_STOP```.
-
-
-**loading_data**
-> 
-> Loads the data from a file and its path ```CV_DATA```, processes it via a given separator ```separator``` and is then ```resampled```. It includes also functions for cleaning up missing > values.
+> Prophet is a tool for producing high quality forecasts for time series data with 
+> multiple seasonality with linear or non-linear growth.
 >
-> - _This function requires the installation of Pandas_
+> - _This model requires the installation of [fbprophet](https://facebook.github.io/prophet/docs/quick_start.html)._
 
+---
 
-**matrix_2d**
->
-> Transforms the columns created via the functions ```extract_data()``` and ```datetime_index()``` to recreate a 2-dimensional output matrix.
-> 
-> - _This function requires the installation of Numpy_
+## Fonctions
 
+- clean_data
+- [csv-to-influxdb](https://github.com/fabio-miranda/csv-to-influxdb)
+- load_data_influx
+- make_folder
+- read_params
+- save_data
+- ts_generator
 
-**read_params**
-> 
-> Allows you to retrieve the parameters from a config file.
-
-
-**save_data**
-> 
-> Exports the matrix in text format, created from the 2D table ```new_matrix``` of the function ```matrix_2d()``` at a given location ```MATRIX_OUTPUT```.
-> 
-> - _This function requires the installation of Numpy_
+---
