@@ -1,6 +1,6 @@
 # Analysis Supervision
 
-## Modèles
+## Models
 
 **ARIMA**
 >
@@ -21,7 +21,7 @@
 
 ---
 
-## Fonctions
+## Functions
 
 - clean_data
 - [csv-to-influxdb](https://github.com/fabio-miranda/csv-to-influxdb)
