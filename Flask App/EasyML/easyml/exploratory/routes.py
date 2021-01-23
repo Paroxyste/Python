@@ -18,7 +18,7 @@ from flask                    import render_template
 from flask                    import request
 from flask                    import session
 
-
+from pandas_profiling         import ProfileReport
 
 import hashlib
 import MySQLdb.cursors

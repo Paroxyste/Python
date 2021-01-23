@@ -2,8 +2,9 @@ flask
 flask_mysqldb
 ipython
 kneed
-passlib
 numpy
 openpyxl
+passlib
 pandas
+pandas-profiling
 scikit-learn
