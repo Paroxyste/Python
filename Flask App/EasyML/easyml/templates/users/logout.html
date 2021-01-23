@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+
+            <div class="card shadow border">
+                <div class="card-block">
+                    <div class="row d-flex align-items-center">
+                        <div class="col">
+                            {%- if msg_suc is not none -%}
+                                <div class="alert alert-success alert-dismissible fade show mb-3 text-center" role="alert">
+                                    {{ msg_suc | e }}
+                                </div>
+                            {%- else -%}
+                                <h3 class="text-uppercase text-center">
+                                    {%- if lang == 'en' -%}
+                                        You are offline
+                                    {%- else -%}
+                                        Vous êtes hors ligne
+                                    {% endif %}
+                                </h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block">
+                    <div class="row d-flex align-items-center">
+                        <div class="col">
+                            <h3 class="f-w-300 text-uppercase text-center">
+                                {%- if lang == 'en' -%}
+                                    See you soon !
+                                {%- else -%}
+                                    &Agrave; bientôt !
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block">
+                    <div class="row d-flex align-items-center">
+                        <div class="col">
+                            <small class="d-block text-uppercase text-center">
+                                {%- if lang == 'en' -%}
+                                    You will be automatically redirected in 3s ...
+                                {%- else -%}
+                                    Vous serez automatiquement redirigé dans 3s ...
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    setTimeout(function(){
+                        window.location.href = "{{ url_for('main.home' | urlencode) }}";
+                    }, 2000);
+                </script>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

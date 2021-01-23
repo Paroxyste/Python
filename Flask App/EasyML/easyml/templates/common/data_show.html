@@ -1,0 +1,49 @@
+<div class="card-header">
+    <h5 class="text-uppercase">
+        <i class="ti-layout-grid4 mr-2"></i>
+        {%- if lang == 'en' -%}
+            Visualize your datas
+        {%- else -%}
+            Visualisez vos données
+        {% endif %}
+    </h5>
+</div>
+
+<div class="card-block">
+    {%- if msg_warn is not none -%}
+        <div role="alert"
+             class="alert alert-warning alert-dismissible fade show mb-5">
+            {{ msg_warn | e }}
+
+            <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">
+                    <small>
+                        <i class="ti-close mr-2"></i>
+                    </small>
+                </span>
+            </button>
+        </div>
+    {% endif %}
+
+    {%- if data_show is not none -%}
+        <div class="table-responsive">
+            <div id="zero-configuration_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        {{ data_show | e}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%- else -%}
+        <div class="alert alert-warning" role="alert">
+            {%- if lang == 'en' -%}
+                To access this category, please upload your data and
+                select a separator.
+            {%- else -%}
+                Pour accéder à cette catégorie, veuillez télécharger vos 
+                données et sélectionner un séparateur.
+            {%- endif -%}
+        </div>
+    {% endif %}
+</div>

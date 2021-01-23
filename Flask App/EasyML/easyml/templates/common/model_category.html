@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% include 'common/navbar.html' %}
+    {% include 'common/header.html' %}
+
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    {% include 'common/breadcrumb.html' %}
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+
+                                {% include 'common/card_categ.html' %}
+                                {% include 'common/card_model.html' %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,90 @@
+<nav class="pcoded-navbar theme-horizontal ml-0">
+    <div class="navbar-wrapper">
+        <div class="navbar-brand header-logo">
+            <a href="index.html" class="b-brand">
+                <div class="b-bg">
+                    <i class="feather icon-trending-up"></i>
+                </div>
+
+                <span class="b-title">Easy ML</span>
+            </a>
+
+            <a class="mobile-menu" id="mobile-collapse" href="#!">
+                <span></span>
+            </a>
+        </div>
+
+        <div class="navbar-content sidenav-horizontal" id="layout-sidenav">
+            <ul class="nav pcoded-inner-navbar sidenav-inner">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Navigation</label>
+                </li>
+
+                {%- if nav_cat_tag[0] == cat_tag -%}
+                    <li class="nav-item active">
+                {%- else -%}
+                    <li class="nav-item">
+                {% endif %}
+                    <a href="{{ url_for(nav_cat_lnk[0] | urlencode) }}" class="nav-link">
+                        <span class="pcoded-micon">
+                            <i class="{{ nav_cat_icon[0] | e }}"></i>
+                        </span>
+
+                        <span class="pcoded-mtext">
+                            {{ nav_cat_name[0] | e }}
+                        </span>
+                    </a>
+                </li>
+
+                {%- if nav_cat_tag[1] == cat_tag -%}
+                    <li class="nav-item active">
+                {%- else -%}
+                    <li class="nav-item">
+                {% endif %}
+                    <a href="{{ url_for(nav_cat_lnk[1] | urlencode) }}" class="nav-link">
+                        <span class="pcoded-micon">
+                            <i class="{{ nav_cat_icon[1] | e }}"></i>
+                        </span>
+
+                        <span class="pcoded-mtext">
+                            {{ nav_cat_name[1] | e }}
+                        </span>
+                    </a>
+                </li>
+
+                {%- for i in range(2, nav_cat_name | count) -%}
+                    {%- if nav_cat_tag[i] == cat_tag -%}
+                        <li class="nav-item pcoded-hasmenu active">
+                    {%- else -%}
+                        <li class="nav-item pcoded-hasmenu">
+                    {% endif %}
+                        <a href="{{ url_for(nav_cat_lnk[i] | urlencode)}}" class="nav-link">
+                            <span class="pcoded-micon">
+                                <i class="{{ nav_cat_icon[i] | e}}"></i>
+                            </span>
+
+                            <span class="pcoded-mtext">
+                                {{ nav_cat_name[i] | e }}
+                            </span>
+                        </a>
+
+                        <ul class="pcoded-submenu">
+                            {%- for ml in nav_models[i] -%}
+                                {%- if ml[0] == title -%}
+                                    <li class="active">
+                                {%- else -%}
+                                    <li>
+                                {% endif %}
+                                    <a href="{{ url_for(ml[1] | urlencode) }}">
+                                        {{ ml[0] | e}}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>
+

@@ -1,0 +1,205 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% include 'common/navbar.html' %}
+    {% include 'common/header.html' %}
+
+
+    <div class="auth-wrapper">
+        <div class="auth-content col-3">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+
+            <div class="card shadow-1 card-shadow-hover mt-5">
+                <div class="card-body text-center">
+                    <h5 class="text-uppercase mb-4">
+                        {%- if lang == 'en' -%}
+                            Profile Settings
+                        {%- else -%}
+                            Paramètres du profil
+                        {% endif %}
+                    </h5>
+
+                    {%- if msg_err is not none or msg_suc is not none -%}
+                        <div role="alert"
+                            {%- if msg_err is not none -%}
+                                class="alert alert-danger alert-dismissible fade show mb-3">
+                                {{ msg_err | e }}
+
+                            {%- elif msg_suc is not none -%}
+                                class="alert alert-success alert-dismissible fade show mb-3">
+                                {{msg_suc | e }}
+
+                                <script>
+                                    setTimeout(function(){
+                                        window.location.href = "{{ url_for('users.logout' | urlencode) }}";
+                                    }, 3000);
+                                </script>
+                            {% endif %}
+
+                            <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <small>
+                                        <i class="ti-close mr-2"></i>
+                                    </small>
+                                </span>
+                            </button>
+                        </div>
+                    {%- else -%}
+                        <div class="alert alert-info text-center mb-3" role="alert">
+                            {%- if lang == 'en' -%}
+                                Modify only the necessary fields.
+                                <br />
+                                Each modification will cause a disconnection.
+                            {%- else -%}
+                                Ne modifiez que les champs nécessaires.
+                                <br />
+                                Chaque modification entraînera une déconnexion.
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <form action="{{ url_for('users.settings' | urlencode) }}" method="POST">
+                        <div class="form-group mb-3 text-left">
+                            <label for="username" class="text-uppercase">
+                                <small>
+                                    {%- if lang == 'en' -%}
+                                        Username
+                                    {%- else -%}
+                                        Nom d'utilisateur
+                                    {% endif %}
+                                </small>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   name="username"
+                                   minlength="3"
+                                   maxlength="25"
+                                   placeholder={{ username | e }}>
+                        </div>
+
+                        <div class="form-group mb-3 text-left">
+                            <label for="email" class="text-uppercase">
+                                <small>
+                                    {%- if lang == 'en' -%}
+                                        Email
+                                    {%- else -%}
+                                        Adresse Mail
+                                    {% endif %}
+                                </small>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   name="email"
+                                   minlength="10"
+                                   maxlength="50"
+                                   placeholder={{ email | e }}>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group text-left col-6">
+                                <label for="password" class="text-uppercase">
+                                    <small>
+                                        {%- if lang == 'en' -%}
+                                            Old Password
+                                        {%- else -%}
+                                            Ancien mot de passe
+                                        {% endif %}
+                                    </small>
+                                </label>
+
+                                <input type="password"
+                                       class="form-control"
+                                       name="password"
+                                       minlength="10"
+                                       maxlength="60"
+                                       placeholder="Old Password">
+                            </div>
+
+                            <div class="form-group text-left col-6">
+                                <label for="new_password" class="text-uppercase">
+                                    <small>
+                                        {%- if lang == 'en' -%}
+                                            New Password
+                                        {%- else -%}
+                                            Nouveau mot de passe
+                                        {% endif %}
+                                    </small>
+                                </label>
+
+                                <input type="password"
+                                       class="form-control"
+                                       name="new_password"
+                                       minlength="10"
+                                       maxlength="50"
+                                       placeholder="New Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4 text-left">
+                            <label for="lang_sel" class="text-uppercase">
+                                <small>
+                                    {%- if lang == 'en' -%}
+                                        Language
+                                    {%- else -%}
+                                        Langue
+                                    {% endif %}
+                                </small>
+                            </label>
+
+                            <select class="form-control text-muted"
+                                    required="true"
+                                    name="lang_sel">
+
+                                <option 
+                                    {% if lang == 'en' %}
+                                        value="EN" selected>
+                                        EN - English
+                                    </option>
+
+                                    <option value="FR">
+                                        FR - Français
+                                    </option>
+
+                                    {% else %}
+                                        value="FR" selected>
+                                        FR - Français
+                                    </option>
+
+                                    <option value="FR">
+                                        EN - English
+                                    </option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary text-uppercase shadow-2 mb-4" 
+                                type="submit">
+                            {%- if lang == 'en' -%}
+                                Save
+                            {%- else -%}
+                                Enregistrer
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <p class="mb-0 text-muted">
+                        <small>
+                            {%- if lang == 'en' -%}
+                                Want to delete your account ? <a href="{{ url_for('users.delete_account' | urlencode) }}">Click here</a>
+                            {%- else -%}
+                                Vous souhaitez supprimer votre compte ? <a href="{{ url_for('users.delete_account' | urlencode) }}">Cliquez ici</a>
+                            {% endif %}
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

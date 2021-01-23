@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+
+            <div class="card shadow border">
+                <div class="card-block">
+                    <div class="row d-flex align-items-center">
+                        <div class="col">
+                            <h4 class="text-uppercase text-center">
+                                {%- if lang == 'en' -%}
+                                    Are you sure to delete your account ?
+                                {% else %}
+                                    Êtes-vous sûr de supprimer votre compte ?
+                                {% endif %}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block">
+                    <div class="row d-flex align-items-center">
+                        <div class="col">
+                            <span class="d-block text-center">
+                                {%- if lang == 'en' -%}
+                                    The deletion of your account will be irreversible, and its recovery will not be possible !
+                                    <br /><br />
+                                    Are you really sure you want to delete your account?
+                                {%- else -%}
+                                    La suppression de votre compte sera irréversible, et sa récupération ne sera pas possible !
+                                    <br /><br />
+                                    Êtes-vous vraiment sûr de vouloir supprimer votre compte ?
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('users.delete_account' | urlencode) }}" method="POST">
+                    <div class="card-block">
+                        <div class="row d-flex align-items-center">
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-danger">
+                                    {%- if lang == 'en' -%}
+                                        Yes, I delete !
+                                    {%- else -%}
+                                        Oui, je le supprime !
+                                    {% endif %}
+                                </button>
+
+                                <a href="{{ url_for('users.settings' | urlencode) }}" class="btn btn-success text-white">
+                                    {%- if lang == 'en' -%}
+                                        Cancel
+                                    {%- else -%}
+                                        Annuler
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang={{ lang  | e}}>
+
+<head>
+    <!-- Title -->
+    {%- if title -%}
+        <title>
+            {{ title  | e}}
+        </title>
+    {%- else -%}
+        <title>
+            Easy ML
+        </title>
+    {% endif %}
+
+    <!-- Metadatas -->
+    <meta charset="utf-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui"/>
+
+    <meta http-equiv="X-UA-Compatible"
+          content="IE=edge" />
+
+    <meta name="description"
+          content="" />
+
+    <meta name="keywords"
+          content="">
+
+    <meta name="author"
+          content="ECHEVERRIA Laurent" />
+
+    <!-- Favicon -->
+    <link rel="icon"
+          href="{{ url_for('static', filename='images/favicon.ico' | urlencode) }}"
+          type="image/x-icon">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/animate.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/datatables.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/upload-btn.min.css' | urlencode) }}"
+          type="text/css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/datta-icon.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/feather.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/fontawesome-all.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/opensans.min.css' | urlencode) }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/themify-icons.min.css' | urlencode) }}"
+          type="text/css">
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/plotly.min.js' | urlencode) }}"></script>
+
+</head>
+
+<body>
+    {% block content %}
+
+    {% endblock content %}
+
+    <!-- Required Js -->
+    <script src="{{ url_for('static', filename='js/vendor-all.min.js' | urlencode) }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js' | urlencode) }}"></script>
+    <script src="{{ url_for('static', filename='js/datatables.min.js' | urlencode) }}"></script>
+    <script src="{{ url_for('static', filename='js/horizontal-menu.js' | urlencode) }}"></script>
+    <script src="{{ url_for('static', filename='js/pcoded.min.js' | urlencode) }}"></script>
+    <script src="{{ url_for('static', filename='js/tbl-datatable-custom.js' | urlencode) }}"></script>
+    <script src="{{ url_for('static', filename='js/upload-btn.min.js' | urlencode) }}"></script>
+
+</body>
+</html>

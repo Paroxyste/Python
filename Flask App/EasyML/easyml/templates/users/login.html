@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="auth-wrapper aut-bg-img-side cotainer-fiuid align-items-stretch">
+        <div class="row align-items-center w-100 align-items-stretch bg-white">
+            <div class="d-none d-lg-flex col-lg-8 aut-bg-img-login align-items-center d-flex justify-content-center"></div>
+
+            <div class="col-lg-4 align-items-stret h-100 align-items-center d-flex justify-content-center">
+                <div class=" auth-content text-center">
+                    <h3 class="mb-5 text-uppercase">
+                        Login
+                    </h3>
+
+                    {%- if msg_err is not none or msg_suc is not none -%}
+                       
+                        <div role="alert"
+                            {%- if msg_err is not none  -%}
+                                class="alert alert-danger alert-dismissible fade show">
+                                {{ msg_err | e }}
+
+                            {%- elif msg_suc is not none -%}
+                                class="alert alert-success alert-dismissible fade show">
+                                {{ msg_suc | e }}
+
+                                <script>
+                                    setTimeout(function(){
+                                        window.location.href = "{{ url_for('main.home' | urlencode) }}";
+                                    }, 2000);
+                                </script>
+                            {% endif %}
+
+                            <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <small>
+                                        <i class="ti-close mr-2"></i>
+                                    </small>
+                                </span>
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    <form action="{{ url_for('users.login' | urlencode) }}" method="POST">
+                        <div class="form-group mb-3 text-left">
+                            <label for="email" class="text-uppercase">
+                                <small>
+                                    Email
+                                </small>
+                            </label>
+
+
+                            <input type="email"
+                                   class="form-control"
+                                   placeholder="exemple@domain.com"
+                                   name="email"
+                                   minlegth="10"
+                                   maxlength="50"
+                                   required="true">
+                        </div>
+
+                        <div class="form-group mb-4 text-left">
+                            <label for="password" class="text-uppercase">
+                                <small>
+                                    Password
+                                </small>
+                            </label>
+
+                            <input type="password"
+                                   class="form-control"
+                                   placeholder="Password"
+                                   name="password"
+                                   minlegth="10"
+                                   maxlength="60"
+                                   required="true">
+                        </div>
+
+                        <button class="btn btn-primary noty text-uppercase shadow-2 mb-4" 
+                                type="submit">
+                            Login
+                        </button>
+                    </form>
+
+                    <p class="mb-0 text-muted">
+                        Don’t have an account ? 
+                        <a href="{{ url_for('users.register' | urlencode) }}">
+                            Signup
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}

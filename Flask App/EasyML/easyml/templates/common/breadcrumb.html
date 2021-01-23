@@ -1,0 +1,41 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12 mb-3">
+
+                <div class="page-header-title">
+                    <h5 class="m-b-10">
+                        Navigation
+                    </h5>
+                </div>
+
+                <ul class="breadcrumb">
+                    <!-- I'm on the home page -->
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('main.home' | urlencode) }}">
+                            <i class="feather icon-home"></i>
+                        </a>
+                    </li>
+
+                    {%- if cat_tag != 'HOME' -%}
+                        <!-- I'm in a category -->
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for(cat_link | urlencode) }}">
+                                {{ cat_name | e }}
+                            </a>
+                        </li>
+
+                        {%- if model_name is defined -%}
+                            <!-- I'm in a model -->
+                            <li class="breadcrumb-item">
+                                <a href="{{ url_for(model_link | urlencode) }}">
+                                    {{ model_name | e }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

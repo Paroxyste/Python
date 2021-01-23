@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% include 'common/navbar.html' %}
+    {% include 'common/header.html' %}
+
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    {% include 'common/breadcrumb.html' %}
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form action="{{ url_for('exp.exploratory_analysis' | urlencode) }}" 
+                                  method="POST" 
+                                  enctype="multipart/form-data">
+
+                                {% include 'common/upload_file.html' %}
+                            </form>
+
+                            {%- if report == true -%}
+                            <div class="text-center text-uppercase animate__animated animate__fadeIn mt-3">
+                                <a class="btn btn-lg btn-primary shadow-2 text-uppercase"
+                                   id="dl_link"
+                                   href="{{ data_show | urlencode }}" 
+                                   download>
+                                   <i class="feather icon-download mr-2"></i>
+                                    {%- if lang == 'en' -%}
+                                        Download my report
+                                    {%- else -%}
+                                        Télécharger mon rapport
+                                    {% endif %}
+                                </a>
+                            </div>
+
+                            <script>
+                                setTimeout(function(){
+                                    window.location.href = "{{ url_for('exp.exploratory_analysis' | urlencode) }}";
+                                }, 29000);
+                            </script>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

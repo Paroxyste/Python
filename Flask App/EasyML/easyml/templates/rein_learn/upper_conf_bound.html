@@ -1,0 +1,156 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% include 'common/navbar.html' %}
+    {% include 'common/header.html' %}
+
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    {% include 'common/breadcrumb.html' %}
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form action="{{ url_for('rf.upper_confidence_bound' | urlencode, _anchor='model-result') }}"
+                                   method="POST" 
+                                   enctype="multipart/form-data">
+
+                                {% include 'common/upload_file.html' %}
+
+                                
+                                {%- if data_show is not none -%}
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 offset-2 col-xl-8">
+                                            <div id="data-show" class="card shadow-1 card-shadow-hover animate__animated animate__fadeIn">
+                                                {% include 'common/data_show.html' %}
+
+                                                <div class="card-header">
+                                                    <h5 class="text-uppercase">
+                                                        <i class="feather icon-crosshair mr-2"></i>
+                                                        {%- if lang == 'en' -%}
+                                                            Choose number of choices
+                                                        {%- else -%}
+                                                            Choisissez le nombre de choix
+                                                        {% endif %}
+                                                    </h5>
+                                                </div>
+
+                                                <div class="card-block pb-4">
+                                                    <div class="row pl-3">
+                                                        <div class="col-8 mr-5 input-group mb-4 p-l-0 p-r-0">
+                                                            <div class="input-group-prepend">
+                                                                <button class="btn btn-secondary disabled" type="button">
+                                                                    {%- if lang == 'en' -%}
+                                                                        I want ...
+                                                                    {%- else -%}
+                                                                        Je veux ...
+                                                                    {% endif %}
+                                                                </button>
+                                                            </div>
+
+                                                            {%- if total_reward == 0 -%}
+
+                                                                {%- if data_show is not none or choice_list | count > 0 -%}
+                                                                    <select class="custom-select" name="choice">
+                                                                {%- else -%}
+                                                                    <select class="custom-select" name="choice" disabled>
+                                                                {% endif %}
+
+                                                                {%- if choice_list | count > 0 -%}
+                                                                    {%- for choice in choice_list -%}
+                                                                        <option value={{ choice | e }}>
+                                                                            {{ choice | e }}
+                                                                            {%- if lang == 'en' and choice == 1 -%}
+                                                                                &nbsp;choice
+                                                                            {%- elif lang == 'en' and choice > 1 -%}
+                                                                                &nbsp;choices
+                                                                            {%- else -%}
+                                                                                &nbsp;choix
+                                                                            {% endif %}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                {%- else -%}
+                                                                    <option>
+                                                                        {%- if lang == 'en' -%}
+                                                                            No choice available
+                                                                        {% else %}
+                                                                            Aucun choix possible
+                                                                        {% endif %}
+                                                                    </option>
+                                                                {% endif %}
+                                                                </select>
+
+                                                            {% else %}
+                                                                <select class="custom-select" name="choice" disabled>
+                                                                    <option value={{ choice_sel | e }}>
+                                                                        {{ choice_sel | e }}
+                                                                    </option>
+                                                                </select>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div class="col-3 ml-5 pl-0">
+                                                            <input class="btn btn-primary text-uppercase btn-block"
+                                                                {%- if data_show is not none and choice_list | count > 0 and total_reward == 0 -%}
+                                                                    name="submit_btn"
+                                                                    type="submit"
+                                                                    value={%- if lang == 'en' -%}
+                                                                            "Launch the model"
+                                                                          {%- else -%}
+                                                                            "Lancer le modèle"
+                                                                          {% endif %}
+                                                                    />
+                                                                {%- else -%}
+                                                                    value={%- if lang == 'en' -%}
+                                                                            "Launch the model"
+                                                                          {%- else -%}
+                                                                            "Lancer le modèle"
+                                                                          {% endif %}
+                                                                    disabled />
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        </div>
+
+                        {%- if total_reward > 0 -%}
+                            {% include 'common/model_result.html' %}
+
+                            <script>
+                                let result = {{ res_selected | tojson | e }};
+
+                                let trace = {
+                                    x: result,
+                                    type: 'histogram',
+                                    opacity: 0.6,
+                                };
+
+                                let title_graph = {
+                                    title: {{ graph_title | tojson | e }},
+                                    xaxis: {
+                                        title: 'Choices'
+                                    }, 
+                                    yaxis: {
+                                        title: 'Counter'
+                                    }
+                                };
+
+                                let data = [trace];
+
+                                Plotly.newPlot('model_result', data, title_graph);
+                            </script>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

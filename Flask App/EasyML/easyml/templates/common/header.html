@@ -1,0 +1,84 @@
+<header class="navbar pcoded-header navbar-expand-lg navbar-light">
+    <div class="m-header ml-4">
+        <a class="mobile-menu" id="mobile-collapse1" href="#!">
+            <span></span>
+        </a>
+
+        <a href="{{ url_for('main.home' | urlencode) }}" class="b-brand ml-3 mr-2">
+
+            <div class="b-bg">
+                <i class="feather icon-trending-up"></i>
+            </div>
+
+            <span class="b-title">
+                Easy ML 
+            </span>
+        </a>
+        
+        <small class="text-muted text-uppercase">
+            Alpha
+        </small>
+    </div>
+
+    <a class="mobile-menu" id="mobile-header" href="#!">
+        <i class="feather icon-more-horizontal"></i>
+    </a>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            {%- if username -%}
+
+                <li class="mr-3">
+                    <div class="dropdown drp-user">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="icon feather icon-user mr-2"></i>
+                            {{ username | e}}
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right profile-notification">
+                            <div class="pro-head text">
+                                <img src="{{ url_for('static', filename='images/user/robot.svg' | urlencode) }}" 
+                                     class="img-radius" 
+                                     alt="user-profile">
+
+                                <span class="f-w-300">
+                                    {{ username | e }}
+                                </span>
+                            </div>
+
+                            <ul class="pro-body">
+                                {%- for i in range(nav_set_name | count) -%}
+                                    <li>
+                                        <a href="{{ url_for(nav_set_lnk[i] | urlencode) }}" class="dropdown-item">
+                                            <i class="{{ nav_set_icon[i] | e }}"></i>
+                                            {{ nav_set_name[i] | e }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <img src="{{ url_for('static', filename='images/flags/'+ lang + '.png' | urlencode) }}" 
+                         height="24px"
+                        {%- if (lang == 'en') -%}
+                             alt="Language : English" 
+                             title="English" 
+                        {%- elif (lang == 'fr') -%}
+                             alt="Langue: Français"
+                             title="Français" 
+                        {% endif %}
+                    />
+                </li>
+            {% else %}
+                <script>
+                    setTimeout(function(){
+                        window.location.href = "{{ url_for('main.home' | urlencode) }}";
+                    }, 3000);
+                </script>
+            {% endif %}
+        </ul>
+    </div>
+</header>

@@ -1,0 +1,196 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% include 'common/navbar.html' %}
+    {% include 'common/header.html' %}
+
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+
+                    {% include 'common/breadcrumb.html' %}
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form action="{{ url_for('clust.k_means_clustering' | urlencode, _anchor='model-result') }}"
+                                   method="POST" 
+                                   enctype="multipart/form-data">
+
+                                {% include 'common/upload_file.html' %}
+
+                                
+                                {%- if data_show is not none -%}
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 offset-2 col-xl-8">
+                                            <div id="data-show" class="card shadow-1 card-shadow-hover animate__animated animate__fadeIn">
+                                                {% include 'common/data_show.html' %}
+
+                                                <div class="card-header">
+                                                    <h5 class="text-uppercase">
+                                                        <i class="feather icon-crosshair mr-2"></i>
+                                                        {%- if lang == 'en' -%}
+                                                            Select your columns
+                                                        {%- else -%}
+                                                            Sélectionnez vos colonnes
+                                                        {% endif %}
+                                                    </h5>
+                                                </div>
+
+                                                <div class="card-block pb-4">
+                                                    <div class="row pl-3">
+                                                        <div class="col-4 input-group mb-4 p-l-0 p-r-0">
+                                                            <div class="input-group-prepend">
+                                                                <button class="btn btn-secondary disabled" for="inputGroupSelect02" type="button">
+                                                                    {%- if lang == 'en' -%}
+                                                                        X-axis : My column is ...
+                                                                    {%- else -%}
+                                                                        Axe X : Ma colonne est ...
+                                                                    {% endif %}
+                                                                </button>
+                                                            </div>
+    
+                                                            {%- if k is none -%}
+    
+                                                                {%- if data_show is not none or df_columns | count > 0 -%}
+                                                                    <select class="custom-select" id="X_col" name="X_col">
+                                                                {%- else -%}
+                                                                    <select class="custom-select" id="X_col" name="X_col" disabled>
+                                                                {% endif %}
+    
+                                                                {%- if df_columns | count > 0 -%}
+                                                                    {%- for col in df_columns -%}
+                                                                        <option value={{ col | e }}>{{ col | e }}</option>
+                                                                    {% endfor %}
+                                                                {%- else -%}
+                                                                    <option>
+                                                                        {%- if lang == 'en' -%}
+                                                                            No usable columns
+                                                                        {% else %}
+                                                                            Aucune colonnes utilisables
+                                                                        {% endif %}
+                                                                    </option>
+                                                                {% endif %}
+                                                                </select>
+    
+                                                            {%- else -%}
+                                                                <select class="custom-select" id="target" name="target" disabled>
+                                                                    <option value={{ X_col | e }}>{{ X_col | e }}</option>
+                                                                </select>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div class="col-4 input-group mb-4 ml-5 p-l-0 p-r-0">
+                                                            <div class="input-group-prepend">
+                                                                <button class="btn btn-secondary disabled" for="inputGroupSelect02" type="button">
+                                                                    {%- if lang == 'en' -%}
+                                                                        Y-axis : My column is ...
+                                                                    {%- else -%}
+                                                                        Axe Y : Ma colonne est ...
+                                                                    {% endif %}
+                                                                </button>
+                                                            </div>
+    
+                                                            {%- if k is none -%}
+    
+                                                                {%- if data_show is not none or df_columns | count > 0 -%}
+                                                                    <select class="custom-select" id="Y_col" name="Y_col">
+                                                                {%- else -%}
+                                                                    <select class="custom-select" id="Y_col" name="Y_col" disabled>
+                                                                {% endif %}
+    
+                                                                {%- if df_columns | count > 0 -%}
+                                                                    {%- for col in df_columns -%}
+                                                                        <option value={{ col | e }}>{{ col | e }}</option>
+                                                                    {% endfor %}
+                                                                {%- else -%}
+                                                                    <option>
+                                                                        {%- if lang == 'en' -%}
+                                                                            No usable columns
+                                                                        {% else %}
+                                                                            Aucune colonnes utilisables
+                                                                        {% endif %}
+                                                                    </option>
+                                                                {% endif %}
+                                                                </select>
+    
+                                                            {% else %}
+                                                                <select class="custom-select" id="Y_col" name="Y_col" disabled>
+                                                                    <option value={{ Y_col | e }}>{{ Y_col | e }}</option>
+                                                                </select>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div class="col-3 ml-5 pl-0">
+                                                            <input class="btn btn-primary text-uppercase btn-block"
+                                                                {%- if data_show is not none and df_columns | count > 0 and k is none -%}
+                                                                    name="submit_btn"
+                                                                    type="submit"
+                                                                    value={%- if lang == 'en' -%}
+                                                                            "Launch the model"
+                                                                          {%- else -%}
+                                                                            "Lancer le modèle"
+                                                                          {% endif %}
+                                                                    />
+                                                                {%- else -%}
+                                                                    value={%- if lang == 'en' -%}
+                                                                            "Launch the model"
+                                                                          {%- else -%}
+                                                                            "Lancer le modèle"
+                                                                          {% endif %}
+                                                                    disabled />
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        </div>
+
+                        {%- if k is not none -%}
+                            {% include 'common/model_result.html' %}
+
+                            <script>
+                                let trace_list = [];
+
+                                {%- for i in range(k) -%}
+
+                                    trace_{{ i + 1 }} = {
+                                        x: {{ cluster_pts[i][0] | tojson | e }},
+                                        y: {{ cluster_pts[i][1] | tojson | e }},
+                                        mode: 'markers',
+                                        type: 'scatter',
+                                        name: 'Cluster ' + String({{ i + 1 }}),
+                                        marker: { size: 10 }
+                                    }
+
+                                    trace_list.push(trace_{{ i + 1 }})
+
+                                {% endfor %}
+
+                                var data = trace_list;
+
+                                var layout = {
+                                    title: {{ graph_title | tojson | e }},
+                                    xaxis: {
+                                        title: {{ X_col | replace('_', ' ') | tojson | e }}
+                                    },
+                                    yaxis: {
+                                        title: {{ Y_col | replace('_', ' ') | tojson | e }}
+                                    }
+                                };
+
+                                Plotly.newPlot('model_result', data, layout);
+                            </script>
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+<div class="col-sm-12 mb-3">
+    <div class="card shadow-1 card-shadow-hover code-table mt-3">
+        <div class="card-header">
+            <h5>
+                <i class="{{ cat_icon | e }} mr-2"></i>
+                {{ cat_name | e }}
+            </h5>
+        </div>
+
+        <div class="card-block pb-4">
+            <p class="card-text text-justify ">
+                {{ cat_desc | e }}
+            </p>
+
+            <p class="card-text mb-1">
+                <a href="{{ cat_wiki | e }}" target="_blank">
+                    <small>
+                        More information on Wikipedia
+                    </small>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

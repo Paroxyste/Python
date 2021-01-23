@@ -1,0 +1,120 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% include 'common/navbar.html' %}
+    {% include 'common/header.html' %}
+
+    {% if favorite | count == 0 %}
+
+        <div class="auth-wrapper">
+            <div class="auth-content col-5 mt-5">
+                <div class="auth-bg">
+                    <span class="r s"></span>
+                    <span class="r s"></span>
+                    <span class="r s"></span>
+                    <span class="r s"></span>
+                </div>
+
+                <div class="card theme-bg2 shadow-4 animate__animated animate__fadeIn">
+                    <div class="card-block">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col text-center">
+                                <h2 class="text-white f-w-300 mb-5">
+                                    {%- if lang == 'en' -%}
+                                        Welcome to your dashboard, 
+                                    {%- else -%} 
+                                        Bienvenue sur votre tableau de bord, 
+                                    {% endif %}
+                                    {{ username | e }} !
+                                </h2>
+
+                                <img src="{{ url_for('static', filename='images/user/robot.svg' | urlencode) }}" 
+                                     height="150px"
+                                     class="img-radius" 
+                                     alt="user-profile">
+
+                                <h4 class="text-white mt-5">
+                                    {%- if lang == 'en' -%}
+                                        Add models as favorites by clicking on the <i class="feather icon-heart-on ml-1 mr-1"></i> icon
+                                        on their cards and find them here !
+                                    {%- else -%}
+                                        Ajoutez des modèles à vos favoris en cliquant sur l'icône <i class="feather icon-heart-on ml-1 mr-1"></i> 
+                                        de leur carte et retrouvez-les ici !
+                                    {% endif %}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    {% include 'common/breadcrumb.html' %}
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                    {% for i in range(favorite | count) %}
+                                        <div class="col-md-4 col-xl-3 pb-4">
+                                            <div class="card card-shadow-hover mb-3 animate__animated animate__fadeIn">
+                                                <a href="{{ url_for(card_link[i] | urlencode) }}">
+                                                    <img class="img-fluid"
+                                                        src="{{ url_for('static', filename=card_image[i] | urlencode) }}"
+                                                        alt="Card image cap">
+                                                </a>
+
+                                                <div class="card-block">
+                                                    <a href="{{ url_for(card_link[i] | urlencode) }}">
+                                                        <h5 class="mb-4">
+                                                            {{ card_name[i] | e}}
+                                                        </h5>
+                                                    </a>
+
+                                                    <span class="text-muted">
+                                                        {{ card_desc[i] | e}}
+                                                    </span>
+
+                                                    <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+
+                                                    <div class="row">
+                                                        <div class="col-6 p-r-0">
+                                                            <a href="{{ url_for(card_link[i] | urlencode) }}" 
+                                                               class="btn btn-primary text-uppercase btn-block">
+                                                                <i class="feather icon-power"></i>
+                                                                Start model
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="offset-4 col-1">
+                                                            <form action="" method="POST">
+                                                                <input type="hidden" name="model_id" value="{{ card_id[i] | e}}">
+
+                                                                <button class="btn btn-icon btn-block"
+                                                                        type="submit"
+                                                                        title="Add to favorite">
+                                                                    <h4 class="text-danger">
+                                                                        <i class="feather icon-heart-on"></i>
+                                                                    </h4>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

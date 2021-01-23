@@ -1,0 +1,154 @@
+<div class="row">
+    <div class="col-md-12 offset-2 col-xl-8">
+        <div class="card shadow-1 card-shadow-hover animate__animated animate__fadeIn">
+
+            <div class="card-header">
+                <h5 class="text-uppercase">
+                    <i class="feather icon-upload-cloud mr-2"></i>
+                    {%- if lang == 'en' -%}
+                        Select your datas
+                    {%- else -%}
+                        Sélectionnez vos données
+                    {% endif %}
+                </h5>
+
+                <div class="card-header-right">
+                    <button type="button" 
+                            class="btn btn-icon btn-outline-primary"
+                            data-toggle="collapse" 
+                            data-target="#data_upload_help" 
+                            aria-expanded="false" 
+                            aria-controls="data_upload_help">
+                        <i class="ti-help"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="collapse" id="data_upload_help">
+                <div class="card-body">
+                    <div class="alert alert-info" role="alert">
+                        {%- if lang == 'en' -%}
+                            Help not available at this time.
+                        {%- else -%}
+                            L'aide n'est pas disponible pour le moment.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {%- if msg_err is not none or msg_suc is not none -%}
+                <div role="alert"
+                    {%- if msg_err is not none  -%}
+                        class="alert alert-danger alert-dismissible fade show mt-4 ml-4 mr-4">
+                        {{ msg_err | e }}
+
+                    {%- elif msg_suc is not none -%}
+                        class="alert alert-success alert-dismissible fade show mt-4 ml-4 mr-4">
+                        {{msg_suc | e}}
+
+                    {% endif %}
+
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">
+                            <small>
+                                <i class="ti-close mr-2"></i>
+                            </small>
+                        </span>
+                    </button>
+                </div>
+            {% endif %}
+
+
+            <div class="card-block mb-3">
+                <!-- upload form -->
+                <div class="file-wrapper">
+                    <div class="upload-btn-wrapper">
+                        <button class="btn upload-file">
+                            <h4 class="upload-btn f-w-300 text-uppercase">
+                                <i class="fas fa-cloud-upload-alt d-block font-100 pb-2"></i>
+                                {%- if lang == 'en' -%}
+                                    Click here to upload files
+                                {%- else -%}
+                                    Cliquez ici pour envoyer vos fichiers
+                                {% endif %}
+                            </h4>
+
+                            <small class="text-muted" id="blankFile">
+                                {%- if lang == 'en' -%}
+                                    Supports CSV, TSV XLS, XLSX <br /> Maximum file size :
+                                {%- else -%}
+                                    Prise en charge des formats : CSV, TSV XLS, XLSX <br /> Taille maximale du fichier :
+                                {% endif %}
+                                <b>
+                                    100 Ko
+                                </b>
+                            </small>
+
+                            <span class="success">
+                                <i class="feather icon-check-circle text-success"></i>
+                            </span>
+                        </button>
+
+                        <input type="file" name="file" id="selectfile">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Select separator -->
+            <div class="card-header">
+                <h5 class="text-uppercase">
+                    <i class="ti-split-h mr-2"></i>
+                    {%- if lang == 'en' -%}
+                        Select your data separator
+                    {%- else -%}
+                        Sélectionnez votre séparateur de données
+                    {% endif %}
+                </h5>
+            </div>
+
+            <div class="card-block pb-4">
+                <div class="row pl-3">
+                    <div class="col-8 input-group mb-4 p-l-0 p-r-0">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-secondary disabled" type="button">
+                                {%- if lang == 'en' -%}
+                                    My separator is ...
+                                {%- else -%}
+                                    Mon séparateur est ...
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <select class="custom-select" name="sep_select">
+                            {%- if lang == 'en' -%}
+                                <option value=";" selected>Semicolon ( ; )</option>
+                                <option value=",">Comma ( , )</option>
+                                <option value="\t">Tab ( \t )</option>
+                                <option value=".">Point ( . )</option>
+                                <option value=":">Colon ( : )</option>
+                            {%- else -%}
+                                <option value=";" selected>Point-virgule ( ; )</option>
+                                <option value=",">Virgule ( , )</option>
+                                <option value="\t">Tabulation ( \t )</option>
+                                <option value=".">Point ( . )</option>
+                                <option value=":">Deux-points ( : )</option>
+                            {% endif %}
+                        </select>
+                    </div>
+
+                    <div class="col-4">
+                        <input class="btn btn-primary text-uppercase btn-block"
+                               name="submit_btn"
+                               type="submit"
+                               value={%- if lang =='en' -%}
+                                        "Upload Now"
+                                    {%- else -%}
+                                        "Envoyer maintenant"
+                                    {% endif %}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

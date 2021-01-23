@@ -1,0 +1,62 @@
+{%- for i in range(card_name | count) -%}
+    <div class="col-md-4 col-xl-3 pb-4">
+        <div id="{{ card_id[i] | e}}" 
+             class="card shadow-1 card-shadow-hover mb-3 animate__animated animate__fadeIn">
+            <a href="{{ url_for(card_link[i] | urlencode) }}">
+                <img class="img-fluid"
+                    src="{{ url_for('static', filename=card_image[i] | urlencode) }}"
+                    alt="Card image cap">
+            </a>
+
+            <div class="card-block">
+                <a href="{{ url_for(card_link[i] | urlencode) }}">
+                    <h5 class="mb-4">
+                        {{ card_name[i] | e }}
+                    </h5>
+                </a>
+
+                <span class="text-muted">
+                    <p class="text-justify">
+                        {{ card_desc[i] | e }}
+                    </p>
+                </span>
+
+                <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+
+                <div class="row">
+                    <div class="col-6 p-r-0">
+                        <a href="{{ url_for(card_link[i] | urlencode) }}" class="btn btn-primary text-uppercase btn-block">
+                            <i class="feather icon-power"></i>
+                            Start model
+                        </a>
+                    </div>
+
+                    <div class="offset-4 col-1">
+                        <form action="" method="POST">
+                            <input type="hidden" name="model_id" value="{{ card_id[i] | e }}">
+
+                            <button type="submit"
+                                {%- if card_id[i] not in favorite -%}
+                                    class="btn btn-icon btn-block"
+                                    title="Add to favorites"
+                                {%- else -%}
+                                    class="btn btn-icon btn-block"
+                                    title="Remove favorites"
+                                {% endif %}>
+
+                                <h4 class="text-danger">
+                                    {%- if card_id[i] not in favorite -%}
+                                        <i class="feather icon-heart"></i>
+                                    {%- else -%}
+                                        <i class="feather icon-heart-on"></i>
+                                    {% endif %}
+                                </h4>
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

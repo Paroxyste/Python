@@ -1,0 +1,46 @@
+<div class="row mt-5">
+    <div class="col-md-12 offset-2 col-xl-8">
+        <div id="model-result" class="card shadow-1 card-shadow-hover animate__animated animate__fadeIn">
+            <!-- Show result -->
+            <div class="card-header">
+                <h5 class="text-uppercase">
+                    <i class="ti-cup mr-2"></i>
+                    {%- if lang == 'en' -%}
+                        Model Result
+                    {%- else -%}
+                        Résultat du modèle
+                    {% endif %}
+                </h5>
+
+                <div class="card-header-right">
+                    <button type="button" 
+                            class="btn btn-icon btn-outline-primary"
+                            data-toggle="collapse" 
+                            data-target="#model_result_help" 
+                            aria-expanded="false" 
+                            aria-controls="model_result_help">
+                        <i class="ti-help"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="collapse" id="model_result_help">
+                <div class="card-body">
+                    <div class="alert alert-info" role="alert">
+                        {%- if lang == 'en' -%}
+                            Help not available at this time.
+                        {%- else -%}
+                            L'aide n'est pas disponible pour le moment.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-block">
+
+                <div id="model_result"></div>
+
+            </div>
+        </div>
+    </div>
+</div>

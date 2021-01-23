@@ -1,0 +1,9 @@
+flask
+flask_mysqldb
+ipython
+kneed
+passlib
+numpy
+openpyxl
+pandas
+scikit-learn

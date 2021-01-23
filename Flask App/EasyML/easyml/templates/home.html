@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Echeverria Laurent">
+
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/home.min.css') }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/feather.min.css') }}"
+          type="text/css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/opensans.min.css') }}"
+          type="text/css">
+
+    <title>{{ title }}</title>
+
+</head>
+
+<body class="light_blue">
+    <div class="preloader">
+        <div class="preloader-container">
+            <svg version="1.1"
+                 id="L5"
+                 xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 x="0px"
+                 y="0px"
+                 viewBox="0 0 100 100"
+                 enable-background="new 0 0 0 0"
+                 xml:space="preserve">
+
+                <circle fill="#675cda"
+                        stroke="none"
+                        cx="6"
+                        cy="50"
+                        r="6">
+
+                    <animateTransform attributeName="transform"
+                                      dur="1s"
+                                      type="translate"
+                                      values="0 15 ; 0 -15; 0 15"
+                                      repeatCount="indefinite"
+                                      begin="0.1" />
+                </circle>
+
+                <circle fill="#675cda"
+                        stroke="none"
+                        cx="30"
+                        cy="50"
+                        r="6">
+
+                    <animateTransform attributeName="transform"
+                                      dur="1s"
+                                      type="translate"
+                                      values="0 10 ; 0 -10; 0 10"
+                                      repeatCount="indefinite"
+                                      begin="0.2" />
+                </circle>
+
+                <circle fill="#675cda"
+                        stroke="none"
+                        cx="54"
+                        cy="50"
+                        r="6">
+
+                    <animateTransform attributeName="transform"
+                                      dur="1s"
+                                      type="translate"
+                                      values="0 5 ; 0 -5; 0 5"
+                                      repeatCount="indefinite"
+                                      begin="0.3" />
+                </circle>
+            </svg>
+
+            <span>
+                loading
+            </span>
+        </div>
+    </div>
+
+    <div class="header_top">
+        <div class="container">
+            <div class="full">
+                <div class="row">
+                    <div class="col-md-12 col-xs-12 hidden-xs">
+                        <ul class="top_information pull-right">
+                            <li>
+                                <a href="{{ url_for('users.login' | urlencode) }}">
+                                    <i class="feather icon-unlock mr-1"></i>
+                                    Sign In
+                                </a>
+                            </li>
+            
+                            <li>
+                                <a href="{{ url_for('users.register' | urlencode) }}">
+                                    <i class="feather icon-user-plus mr-1"></i>
+                                    Register for FREE !
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="full_slider" class="full_slider_inner padding_0">
+        <div id="pallax_slider">
+            <div id="l1" class="layer dott_star2"></div>
+            <div id="l2" class="layer clouds2"></div>
+
+            <div id="l3" class="layer center_layer_img">
+                <img class="wow fadeInUp" 
+                     src="{{ url_for('static', filename='images/home/rocker_fly.png') }}" 
+                     alt="#" 
+                     data-wow-duration="2s" 
+                     data-wow-delay="0.25s" 
+                />
+            </div>
+
+            <div id="l4" class="layer blue_layer_bottom">
+                <img class="wow fadeInUp" 
+                     src="{{ url_for('static', filename='images/home/blue_layer_bottom.png') }}" 
+                     alt="#" 
+                     data-wow-duration="2s" 
+                     data-wow-delay="0.25s" 
+                />
+            </div>
+
+            <div class="vertical-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 wow fadeInDown" data-wow-duration="2s">
+                            <div class="center">
+                                <div class="slider_contant right_side text_align_center">
+                                    <h2>
+                                        <span class="text-info">Boost</span> your <span class="text-info">data</span> using
+                                        EasyML
+                                    </h2>
+
+                                    <p>
+                                        The service is <strong class="text-info">completely free</strong> !
+                                    </p>
+
+                                    <div class="button_section mt-5">
+                                        <div class="center">
+                                            <ul>
+                                                <li>
+                                                    <a class="btn btn-sm btn-rounded btn-outline-info" 
+                                                       href="{{ url_for('users.register' | urlencode) }}">
+                                                        Start Now
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="padding-100-0 position-relative">
+        <div class="container">
+            <div class="row justify-content-between mr-tp-50">
+                <div class="col-md-6 side-text-right-container">
+                    <h2 class="side-text-right-title">
+                        You are guided at every step
+                    </h2>
+
+                    <p class="side-text-right-text">
+                        No matter what your profession, degree or technical level, we are the ideal solution for you.
+                        The power of the machine learning has never been easier to use. Through a simple and intuitive
+                        interface you will be able to use all the models at your disposal. And if you ever encounter
+                        any difficulty in using or understanding a model, help is available to you.
+                        <br /><br />
+                        We are one of the easiest to use platforms, and we are committed to providing our customers
+                        with one of the best calculation solutions on the market through regular investments in new
+                        servers, without increasing costs for you...
+                    </p>
+
+                    <a class="side-text-right-button" href="#prices">start with us now</a>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="display-on-hover-box-container">
+                        
+                        <a href="#tab1" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/backend.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab2" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/rocket.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab3" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/server-2.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab4" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/cloud-servers.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab5" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/pie-chart.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab6" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/help.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab7" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/confidential-folder.svg') }}" alt="" />
+                        </a>
+
+                        <a href="#tab8" class="display-on-hover-box-items">
+                            <img src="{{ url_for('static', filename='images/home/cloud.svg') }}" alt="" />
+                        </a>
+
+                        <div class="display-on-hover-box-content">
+                            <div class="display-on-hover-box-cotent-items">
+
+                                <div id="tab1" class="tab-content-hover">
+                                    <h5>
+                                        Intuitive interface
+                                    </h5>
+
+                                    <p>
+                                        Use a simple and intuitive interface translated into several languages (English, French).
+                                    </p>
+                                </div>
+
+                                <div id="tab2" class="tab-content-hover">
+                                    <h5>
+                                        Boost Your business
+                                    </h5>
+
+                                    <p>
+                                        Exploit your data and integrate the machine learning in your company.
+                                    </p>
+                                </div>
+
+                                <div id="tab3" class="tab-content-hover">
+                                    <h5>
+                                        Powerful server
+                                    </h5>
+
+                                    <p>
+                                        The servers are powerful enough for an intensive use of the proposed models.
+                                    </p>
+                                </div>
+
+                                <div id="tab4" class="tab-content-hover">
+                                    <h5>
+                                        Accessibility 24/24
+                                    </h5>
+
+                                    <p>
+                                        We guarantee you a service that is accessible 24/7.
+                                    </p>
+                                </div>
+
+                                <div id="tab5" class="tab-content-hover">
+                                    <h5>
+                                        Many models
+                                    </h5>
+
+                                    <p>
+                                        Run regression, classification, clustering and much more with EasyML.
+                                    </p>
+                                </div>
+
+                                <div id="tab6" class="tab-content-hover">
+                                    <h5>
+                                        Step-by-step help
+                                    </h5>
+
+                                    <p>
+                                        Help is available for each step of the model.
+                                    </p>
+                                </div>
+
+                                <div id="tab7" class="tab-content-hover">
+                                    <h5>
+                                        Privacy Policy
+                                    </h5>
+
+                                    <p>
+                                        All data used for the analyses are automatically deleted once the result is returned.
+                                    </p>
+                                </div>
+
+                                <div id="tab8" class="tab-content-hover">
+                                    <h5>
+                                        Model management
+                                    </h5>
+
+                                    <p>
+                                        You can add and remove models that you use regularly to increase productivity.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="footer-section">
+        <div class="container">
+            <div class="row justify-content-between ">
+                <div class="final-footer-area-text">
+                    © Copyright 2021 - EasyML - Made with <i class="feather icon-heart-on mr-1 ml-1"></i> by <a href="https://laurent-dev.fr" target="_blank" >Echeverria Laurent</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/home.min.js') }}"></script>
+
+
+</body>
+</html>
